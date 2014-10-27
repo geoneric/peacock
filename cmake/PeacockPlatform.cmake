@@ -25,7 +25,7 @@ if(${compiler_id} STREQUAL "GNU")
     endif()
 endif()
 
-if(${compiler_id} STREQUAL "gcc")
+if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
     string(FIND ${compiler_version} "." period_index)
     string(SUBSTRING ${compiler_version} 0 ${period_index} compiler_main_version)
 endif()
