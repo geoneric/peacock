@@ -1,0 +1,33 @@
+set(target_system_name ${CMAKE_SYSTEM_NAME})
+set(target_architecture ${CMAKE_SYSTEM_PROCESSOR})
+set(compiler_id ${CMAKE_CXX_COMPILER_ID})
+set(compiler_version ${CMAKE_CXX_COMPILER_VERSION})
+
+if(${target_system_name} STREQUAL "Linux")
+    set(target_system_name "linux")
+elseif(${target_system_name} STREQUAL "Windows")
+    if(CYGWIN)
+        set(target_system_name "cygwin")
+    else()
+        set(target_system_name "windows")
+    endif()
+endif()
+
+if(${target_architecture} STREQUAL "AMD64")
+    set(target_architecture "x86_64")
+endif()
+
+if(${compiler_id} STREQUAL "GNU")
+    if(MINGW)
+        set(compiler_id "mingw")
+    else()
+        set(compiler_id "gcc")
+    endif()
+endif()
+
+if(${compiler_id} STREQUAL "gcc")
+    string(FIND ${compiler_version} "." period_index)
+    string(SUBSTRING ${compiler_version} 0 ${period_index} compiler_main_version)
+endif()
+
+set(peacock_target_platform ${target_system_name}/${compiler_id}-${compiler_main_version}/${target_architecture})
