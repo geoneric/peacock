@@ -8,12 +8,11 @@ This project tries to make it easy to install specific versions of external soft
 
 ```bash
 cd /tmp/peacock-build
-cmake -Dpeacock_prefix=/opt/peacock -Dbuild_boost=true /tmp/peacock
+cmake -Dpeacock_prefix=/opt/peacock -Dbuild_boost=true <path_to>/peacock
 make
 ```
 
-This command will configure, build and install Boost. The results will be installed to a directory below `/opt/peacock`. The name of this directory will reflect the target platform of the build, so multiple builds of the same package but for different target platforms can co-exist in the same prefix location.
-
+This command will configure, build and install Boost. The results will be installed to a directory below `/opt/peacock`. Projects using Boost can point their build script to this directory. The name of the installation directory reflects the target platform of the build, so multiple builds of the same package but for different target platforms can co-exist in the same prefix location.
 
 - [Supported packages](cmake/package/README.md)
 
@@ -23,7 +22,7 @@ Usage
 Peacock consists of a collection of CMake script files that manage the build of requested software packages. The first thing to do is to configure the Peacock build. At the very least you need to tell Peacock which packages you want to build. Packages can be selected by passing `-Dbuild_<package>=true` to the `cmake` command. This will add the package to the build. Most packages allow you to tweak their builds by passing additional, package-specific, configuration options. All packages support the `<package>_version` option to select one of the supported versions. Here is an example of building boost version 1.56:
 
 ```bash
-cmake -Dbuild_boost=true -Dboost_version=1.56.0 /tmp/peacock
+cmake -Dbuild_boost=true -Dboost_version=1.56.0 <path_to>/peacock
 ```
 
 Package-specific options are documented in the [package-specific documentation](cmake/package/README.md).
@@ -40,7 +39,7 @@ Platform specific notes
 -----------------------
 **Windows, Mingw-w64**
 
-On Windows, CMake will always pack up the most recent version of Microsoft Visual Studio, if you have it installed. You can get around this by explicitly selecting the CMake generator of your choice (`cmake -G <generator>`).
+On Windows, CMake will always pick up the most recent version of Microsoft Visual Studio, if you have it installed. You can get around this by explicitly selecting the CMake generator of your choice (`cmake -G <generator>`).
 
 
 Examples
@@ -48,13 +47,20 @@ Examples
 **Linux, GCC**
 
 ```bash
-cmake -Dpeacock_download_dir=~/tmp/peacock-downloads -Dpeacock_prefix=$HOME/Desktop/peacock -Dbuild_boost=true <path_to>/peacock
+cmake \
+    -Dpeacock_download_dir=~/tmp/peacock-downloads \
+    -Dpeacock_prefix=$HOME/Desktop/peacock \
+    -Dbuild_boost=true <path_to>/peacock
 ```
 
 
 **Windows, Mingw-w64, Cygwin Bash shell**
 
 ```bash
-cmake -G "Unix Makefiles" -DCMAKE_MAKE_PROGRAM=mingw32-make -Dpeacock_download_dir=c:/Cygwin/home/<user>/tmp/peacock_downloads -Dpeacock_prefix="c:/Users/<user>/Desktop/peacock" -Dbuild_boost=true <path_to>/peacock
+cmake \
+    -G "Unix Makefiles" \
+    -DCMAKE_MAKE_PROGRAM=mingw32-make \
+    -Dpeacock_download_dir=c:/Cygwin/home/<user>/tmp/peacock_downloads \
+    -Dpeacock_prefix="c:/Users/<user>/Desktop/peacock" \
+    -Dbuild_boost=true <path_to>/peacock
 ```
-
