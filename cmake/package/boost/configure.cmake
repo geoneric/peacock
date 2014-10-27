@@ -7,6 +7,5 @@ if(build_boost)
 endif()
 
 
-# Pick the file containing the right configuration rules.
 set(configure_filename ${peacock_package_dir}/boost/configure-${boost_version})
 include(${configure_filename}.cmake)
