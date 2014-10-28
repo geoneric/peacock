@@ -2,6 +2,16 @@ Boost
 =====
 http://www.boost.org
 
+**Supported platforms**
+
+| host platform | target platform | compiler | architecture |
+| ------------- | --------------- | -------- | ------------ |
+| linux         | linux           | gcc-4    | x86-64       |
+| linux         | linux           | clang-3  | x86-64       |
+| linux         | windows         | mingw    | x86-32       |
+| linux         | windows         | mingw    | x86-64       |
+| windows       | windows         | mingw    | x86-64       |
+
 
 Platform specific notes
 -----------------------
