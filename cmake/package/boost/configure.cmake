@@ -7,5 +7,5 @@ if(build_boost)
 endif()
 
 
-set(configure_filename ${peacock_package_dir}/boost/configure-${boost_version})
-include(${configure_filename}.cmake)
+set(filename ${peacock_package_dir}/boost/configure-${boost_version}.cmake)
+include(${filename})
