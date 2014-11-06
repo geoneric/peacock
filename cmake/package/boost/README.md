@@ -12,6 +12,8 @@ http://www.boost.org
 | linux         | windows         | mingw    | x86-64       |
 | windows       | windows         | mingw    | x86-64       |
 
+Other platforms may work but have not been tested.
+
 
 Platform specific notes
 -----------------------
