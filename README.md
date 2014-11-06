@@ -32,7 +32,7 @@ Package-specific options are documented in the [package-specific documentation](
 | variable                  | description                                      |
 | ------------------------- | ------------------------------------------------ |
 | `peacock_download_dir`    | Directory for downloaded files                   |
-| `peacock_install_prefix`  | Directory for installing files                   |
+| `peacock_prefix`          | Directory for installing files                   |
 
 Peacock will pick up `$CC` and `$CXX`, and forward them to the build scripts of the packages.
 
