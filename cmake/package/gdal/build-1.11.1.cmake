@@ -14,7 +14,24 @@ endif()
 
 set(configure_options
     --prefix=${gdal_prefix}
+    --without-ogr
 )
+
+if(${peacock_cross_compiling})
+    if(${compiler_id} STREQUAL "mingw")
+        if(${target_architecture} STREQUAL "x86_32")
+            set(configure_options
+                ${configure_options}
+                --host=i686-w64-mingw32
+            )
+        else if(${target_architecture} STREQUAL "x86_64")
+            set(configure_options
+                ${configure_options}
+                --host=x86_64-w64-mingw32
+            )
+        endif()
+    endif()
+endif()
 
 
 set(gdal_update_command "")
