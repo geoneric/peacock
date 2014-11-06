@@ -1,7 +1,7 @@
 string(REPLACE "." "_" boost_version_underscore ${boost_version})
 set(boost_project_url http://downloads.sourceforge.net/project/boost/boost)
 set(boost_url ${boost_project_url}/${boost_version}/boost_${boost_version_underscore})
-set(boost_prefix ${package_prefix}/boost-${boost_version})
+set(boost_prefix ${peacock_package_prefix})
 
 
 if(${host_system_name} STREQUAL "windows")
@@ -64,10 +64,6 @@ if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
                     > ${user_config_jam_filename}
             )
         endif()
-        ### set(boost_platform_specific_options
-        ###     ${boost_platform_specific_options}
-        ###     --user-config=user-config.jam
-        ### )
     endif()
 elseif((${compiler_id} STREQUAL "clang"))
     set(boost_toolset clang)

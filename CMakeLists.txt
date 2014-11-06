@@ -4,7 +4,6 @@ project(peacock)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/package
     ${CMAKE_MODULE_PATH}
 )
 
