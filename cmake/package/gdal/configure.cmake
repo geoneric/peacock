@@ -7,5 +7,5 @@ if(build_gdal)
 endif()
 
 
-set(configure_filename ${peacock_package_dir}/gdal/configure-${gdal_version})
-include(${configure_filename}.cmake)
+set(filename ${peacock_package_dir}/gdal/${gdal_version}/configure.cmake)
+include(${filename})

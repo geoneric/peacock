@@ -9,5 +9,6 @@ http://www.gdal.org
 | linux         | linux           | gcc-4     | x86-64              |
 | linux         | windows         | mingw-w64 | x86-64              |
 | linux         | windows         | mingw-w64 | x86-32              |
+| windows       | windows         | mingw-w64 | x86-64              |
 
 Other platforms may work but have not been tested.
