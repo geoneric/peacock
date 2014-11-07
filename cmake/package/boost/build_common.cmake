@@ -36,7 +36,7 @@ if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
     if(DEFINED ENV{CXX})
         # b2 does not pick up CC and CXX. It uses toolsets. In case
         # CXX is set, we need to make sure the toolset we use refers to it.
-        if(${peacock_cross_compiling}) # OR (${compiler_id} STREQUAL "mingw"))
+        if(${peacock_cross_compiling})
             # When cross-compiling, we need to point b2 to the windres, ar
             # and ranlib commands.
             string(FIND $ENV{CXX} "g++" base_id)

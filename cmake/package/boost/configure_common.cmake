@@ -1,5 +1,5 @@
-if(($peacock_host_platform STREQUAL "windows") AND
-        ($peacock_target_platform STREQUAL "windows") AND
+if((${host_system_name} STREQUAL "windows") AND
+        (${target_system_name} STREQUAL "windows") AND
         (${compiler_id} STREQUAL "mingw") AND
         (${target_architecture} STREQUAL "x86_64"))
     find_program(ml64 ml64)
