@@ -9,7 +9,7 @@ if(${host_system_name} STREQUAL "windows")
     set(boost_configure_command ./bootstrap.bat)
 else()
     set(boost_url ${boost_url}.tar.bz2)
-    set(boost_configure_command ./bootstrap.sh)
+    set(boost_configure_command ./bootstrap.sh)  # --with-toolset=xxx)
 endif()
 
 
@@ -31,42 +31,54 @@ else()
 endif()
 
 
-if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
-    set(boost_toolset gcc)
+# b2 does not pick up CC and CXX. It uses toolsets. In case
+# CXX is set, we need to make sure the toolset we use refers to it.
+if(${target_system_name} STREQUAL "darwin")
+    set(boost_toolset darwin)
+
     if(DEFINED ENV{CXX})
-        # b2 does not pick up CC and CXX. It uses toolsets. In case
-        # CXX is set, we need to make sure the toolset we use refers to it.
-        if(${peacock_cross_compiling})
-            # When cross-compiling, we need to point b2 to the windres, ar
-            # and ranlib commands.
-            string(FIND $ENV{CXX} "g++" base_id)
-            string(SUBSTRING $ENV{CXX} 0 ${base_id} base)
-
-            if(${host_system_name} STREQUAL "windows")
-                set(resource_compiler "windres")
-            else()
-                set(resource_compiler ${base}windres)
-            endif()
-
-            set(boost_update_command
-                echo "using gcc : : $ENV{CXX} "
-                    ": "
-                    "<rc>${resource_compiler} "
-                    "<archiver>${base}gcc-ar "
-                    "<ranlib>${base}gcc-ranlib "
-                    "!"
-                    > ${user_config_jam_filename}
-            )
-        else()
-            set(boost_update_command
-                echo "using gcc : : $ENV{CXX} "
-                    "!"
-                    > ${user_config_jam_filename}
-            )
-        endif()
+        set(boost_update_command
+            echo "using darwin : : $ENV{CXX} "
+                "!"
+                > ${user_config_jam_filename}
+        )
     endif()
-elseif((${compiler_id} STREQUAL "clang"))
-    set(boost_toolset clang)
+else()
+    if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
+        set(boost_toolset gcc)
+        if(DEFINED ENV{CXX})
+            if(${peacock_cross_compiling})
+                # When cross-compiling, we need to point b2 to the windres, ar
+                # and ranlib commands.
+                string(FIND $ENV{CXX} "g++" base_id)
+                string(SUBSTRING $ENV{CXX} 0 ${base_id} base)
+
+                if(${host_system_name} STREQUAL "windows")
+                    set(resource_compiler "windres")
+                else()
+                    set(resource_compiler ${base}windres)
+                endif()
+
+                set(boost_update_command
+                    echo "using gcc : : $ENV{CXX} "
+                        ": "
+                        "<rc>${resource_compiler} "
+                        "<archiver>${base}gcc-ar "
+                        "<ranlib>${base}gcc-ranlib "
+                        "!"
+                        > ${user_config_jam_filename}
+                )
+            else()
+                set(boost_update_command
+                    echo "using gcc : : $ENV{CXX} "
+                        "!"
+                        > ${user_config_jam_filename}
+                )
+            endif()
+        endif()
+    elseif((${compiler_id} STREQUAL "clang"))
+        set(boost_toolset clang)
+    endif()
 endif()
 
 
