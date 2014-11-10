@@ -11,6 +11,7 @@ http://www.boost.org
 | linux         | windows         | mingw    | x86-32       |
 | linux         | windows         | mingw    | x86-64       |
 | windows       | windows         | mingw    | x86-64       |
+| macosx        | macosx          | gcc-4    | x86-64       |
 
 Other platforms may work but have not been tested.
 
