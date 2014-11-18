@@ -4,12 +4,68 @@ set(boost_url ${boost_project_url}/${boost_version}/boost_${boost_version_unders
 set(boost_prefix ${peacock_package_prefix})
 
 
+# b2 does not pick up CC and CXX. It uses toolsets. In case
+# CXX is set, we need to make sure the toolset we use refers to it.
+if(${target_system_name} STREQUAL "darwin")
+    set(boost_toolset darwin)
+
+    if(DEFINED ENV{CXX})
+        get_filename_component(cxx $ENV{CXX} ABSOLUTE)
+
+        set(boost_update_command
+            echo "using darwin : : ${cxx} "
+                "!"
+                > ${user_config_jam_filename}
+        )
+    endif()
+else()
+    if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
+        set(boost_toolset gcc)
+
+        if(DEFINED ENV{CXX})
+            get_filename_component(cxx $ENV{CXX} ABSOLUTE)
+
+            if(${peacock_cross_compiling})
+                # When cross-compiling, we need to point b2 to the windres, ar
+                # and ranlib commands.
+                string(FIND ${cxx} "g++" base_id)
+                string(SUBSTRING ${cxx} 0 ${base_id} base)
+
+                if(${host_system_name} STREQUAL "windows")
+                    set(resource_compiler "windres")
+                else()
+                    set(resource_compiler ${base}windres)
+                endif()
+
+                set(boost_update_command
+                    echo "using gcc : : ${cxx} "
+                        ": "
+                        "<rc>${resource_compiler} "
+                        "<archiver>${base}gcc-ar "
+                        "<ranlib>${base}gcc-ranlib "
+                        "!"
+                        > ${user_config_jam_filename}
+                )
+            else()
+                set(boost_update_command
+                    echo "using gcc : : ${cxx} "
+                        "!"
+                        > ${user_config_jam_filename}
+                )
+            endif()
+        endif()
+    elseif((${compiler_id} STREQUAL "clang"))
+        set(boost_toolset clang)
+    endif()
+endif()
+
+
 if(${host_system_name} STREQUAL "windows")
-    set(boost_url ${boost_url}.zip)
-    set(boost_configure_command ./bootstrap.bat)
+    set(boost_url ${boost_url}.zip)  # 7z)
+    set(boost_configure_command ./bootstrap.bat ${boost_toolset})
 else()
     set(boost_url ${boost_url}.tar.bz2)
-    set(boost_configure_command ./bootstrap.sh)  # --with-toolset=xxx)
+    set(boost_configure_command ./bootstrap.sh --with-toolset=${boost_toolset})
 endif()
 
 
@@ -28,57 +84,6 @@ if(${target_system_name} STREQUAL "windows")
     endif()
 else()
     set(boost_variant "release")
-endif()
-
-
-# b2 does not pick up CC and CXX. It uses toolsets. In case
-# CXX is set, we need to make sure the toolset we use refers to it.
-if(${target_system_name} STREQUAL "darwin")
-    set(boost_toolset darwin)
-
-    if(DEFINED ENV{CXX})
-        set(boost_update_command
-            echo "using darwin : : $ENV{CXX} "
-                "!"
-                > ${user_config_jam_filename}
-        )
-    endif()
-else()
-    if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
-        set(boost_toolset gcc)
-        if(DEFINED ENV{CXX})
-            if(${peacock_cross_compiling})
-                # When cross-compiling, we need to point b2 to the windres, ar
-                # and ranlib commands.
-                string(FIND $ENV{CXX} "g++" base_id)
-                string(SUBSTRING $ENV{CXX} 0 ${base_id} base)
-
-                if(${host_system_name} STREQUAL "windows")
-                    set(resource_compiler "windres")
-                else()
-                    set(resource_compiler ${base}windres)
-                endif()
-
-                set(boost_update_command
-                    echo "using gcc : : $ENV{CXX} "
-                        ": "
-                        "<rc>${resource_compiler} "
-                        "<archiver>${base}gcc-ar "
-                        "<ranlib>${base}gcc-ranlib "
-                        "!"
-                        > ${user_config_jam_filename}
-                )
-            else()
-                set(boost_update_command
-                    echo "using gcc : : $ENV{CXX} "
-                        "!"
-                        > ${user_config_jam_filename}
-                )
-            endif()
-        endif()
-    elseif((${compiler_id} STREQUAL "clang"))
-        set(boost_toolset clang)
-    endif()
 endif()
 
 
@@ -124,3 +129,18 @@ ExternalProject_Add(boost-${boost_version}
     BUILD_COMMAND ${boost_build_command}
     INSTALL_COMMAND ${boost_install_command}
 )
+
+
+# if(${host_system_name} STREQUAL "windows")
+#     if(${compiler_id} STREQUAL "mingw")
+#         ExternalProject_Add_Step(boost-${boost_version} fix_bootstrap
+# 
+#             # bootstrap.bat has the msvc toolset hardcoded.
+#             COMMAND sed -i.tmp "s|toolset=msvc|toolset=${boost_toolset}|"
+#                 bootstrap.bat
+# 
+#             DEPENDEES update
+#             WORKING_DIRECTORY <SOURCE_DIR>
+#         )
+#     endif()
+# endif()
