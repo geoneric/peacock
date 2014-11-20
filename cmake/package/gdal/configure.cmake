@@ -3,7 +3,12 @@ set(gdal_version "1.11.1")
 
 if(build_gdal)
     set(gdal_version ${gdal_version} CACHE STRING "Version of GDAL to build")
-    set(gdal_settings "${gdal_version}")
+    set(gdal_build_python_package FALSE CACHE BOOL "Build Python package")
+
+    set(gdal_settings
+        "version: ${gdal_version}"
+        "python: ${gdal_build_python_package}"
+    )
 endif()
 
 

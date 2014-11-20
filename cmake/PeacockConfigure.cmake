@@ -24,7 +24,12 @@ foreach(package_name ${package_names})
     list(FIND peacock_packages_to_build ${package_name} index)
     if(index GREATER -1)
         message(STATUS
-            "peacock: + ${package_name} (${${package_name}_settings})")
+            # "peacock: + ${package_name} (${${package_name}_settings})")
+            "peacock: + ${package_name}")
+        foreach(setting ${${package_name}_settings})
+            message(STATUS
+                "peacock:   ${setting}")
+        endforeach()
     else()
         message(STATUS
             "peacock: - ${package_name}")
