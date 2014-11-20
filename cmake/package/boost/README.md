@@ -6,7 +6,7 @@ http://www.boost.org
 
 | host platform | target platform | compiler | architecture |
 | ------------- | --------------- | -------- | ------------ |
-| linux         | linux           | gcc-4    | x86-64       |
+| linux         | linux           | gcc, 4.9 | x86-64       |
 | linux         | linux           | clang-3  | x86-64       |
 | linux         | windows         | mingw    | x86-32       |
 | linux         | windows         | mingw    | x86-64       |
