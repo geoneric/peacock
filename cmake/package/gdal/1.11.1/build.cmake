@@ -40,6 +40,9 @@ if(${gdal_build_python_package})
     set(configure_options
         ${configure_options}
         --with-python=${PYTHON_EXECUTABLE}
+
+        # Python extension doesn't build when libtool is used.
+        --without-libtool
     )
 endif()
 
