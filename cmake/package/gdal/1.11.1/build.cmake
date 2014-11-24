@@ -33,6 +33,18 @@ if(${peacock_cross_compiling})
     endif()
 endif()
 
+# Set Python_ADDITIONAL_VERSIONS to a list of version numbers that should
+# be taken into account when searching for Python.
+if(${gdal_build_python_package})
+    find_package(PythonInterp REQUIRED)
+    set(configure_options
+        ${configure_options}
+        --with-python=${PYTHON_EXECUTABLE}
+
+        # Python extension doesn't build when libtool is used.
+        --without-libtool
+    )
+endif()
 
 set(gdal_configure_command ./configure ${configure_options})
 
