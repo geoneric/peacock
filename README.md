@@ -4,7 +4,7 @@ Software for building external projects.
 
 **Very much work in progress!**
 
-Most software depends on external software. When building such software, those external software packages must be installed first. Often they are installed already or can be installed easely using package managers. Sometimes this is not the case, though.
+Most software depends on external software. When building such software, those external software packages must be installed first. Often they are installed already or can be installed easily using package managers. Sometimes this is not the case, though.
 
 This project tries to make it easy to install specific versions of external software. It uses [CMake](http://www.cmake.org) to manage the builds. Here is an example command for building the latest version of [Boost](http://www.boost.org) supported by Peacock:
 
@@ -27,17 +27,20 @@ Peacock consists of a collection of CMake script files that manage the build of 
 cmake -Dbuild_boost=true -Dboost_version=1.56.0 <path_to>/peacock
 ```
 
+General options
+---------------
 Package-specific options are documented in the [package-specific documentation](cmake/package/README.md).
 
 | variable                  | description                                      |
 | ------------------------- | ------------------------------------------------ |
 | `peacock_download_dir`    | Directory for downloaded files                   |
 | `peacock_prefix`          | Directory for installing files                   |
+| `peacock_verbose`         | Print extra (debug) output                       |
 
 Peacock will pick up `$CC` and `$CXX`, and forward them to the build scripts of the packages.
 
 
-Platform specific notes
+Platform-specific notes
 -----------------------
 **Windows, Mingw-w64**
 

@@ -1,6 +1,10 @@
 set(peacock_prefix ${CMAKE_INSTALL_PREFIX} CACHE PATH "Install root")
 set(peacock_package_prefix ${peacock_prefix}/${peacock_target_platform})
-message(STATUS "peacock: install prefix: ${peacock_package_prefix}")
+set(peacock_verbose FALSE CACHE BOOL "Print extra (debug) output")
+
+message(STATUS "peacock: download dir         : ${peacock_download_dir}")
+message(STATUS "peacock: install prefix       : ${peacock_package_prefix}")
+message(STATUS "peacock: verbose              : ${peacock_verbose}")
 
 
 # Iterate over all packages and load each package's configuration settings.
@@ -35,5 +39,3 @@ foreach(package_name ${package_names})
             "peacock: - ${package_name}")
     endif()
 endforeach()
-
-message(STATUS "peacock: download dir: ${peacock_download_dir}")

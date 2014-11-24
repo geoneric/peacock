@@ -2,7 +2,9 @@ Boost
 =====
 http://www.boost.org
 
-**Supported platforms**
+
+Supported platforms
+-------------------
 
 | host platform | target platform | compiler | architecture |
 | ------------- | --------------- | -------- | ------------ |
@@ -17,11 +19,19 @@ http://www.boost.org
 Other platforms may work but have not been tested.
 
 
-Platform specific notes
+Package-specific options
+------------------------
+
+| variable                    | description                                    |
+| --------------------------- | -----------------------------------------------|
+| `boost_version`             | Version of Boost to build                      |
+
+
+Platform-specific notes
 -----------------------
 **Windows, Mingw, Cygwin Bash shell**
 
-The build of Boost.Context requires the [ml or ml64 command](http://msdn.microsoft.com/en-us/library/s0ksfwcf.aspx) to be available. In case the command cannot be found, add the directory containing the command to the PATH environment variable before calling CMake:
+The build of Boost.Context requires the [ml or ml64 command](http://msdn.microsoft.com/en-us/library/s0ksfwcf.aspx)(for 32- or 64-bit build respectively) to be available. In case this command cannot be found, add the directory containing the command to the PATH environment variable before calling CMake:
 
 ```bash
 # 32-bit build:
