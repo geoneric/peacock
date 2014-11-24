@@ -2,7 +2,8 @@ GDAL
 ====
 http://www.gdal.org
 
-**Supported platforms**
+Supported platforms
+-------------------
 
 | host platform | target platform | compiler  | target architecture |
 | ------------- | --------------- | --------- | ------------------- |
@@ -12,3 +13,12 @@ http://www.gdal.org
 | windows       | windows         | mingw-w64 | x86-64              |
 
 Other platforms may work but have not been tested.
+
+
+Package-specific options
+------------------------
+
+| variable                    | description                                    |
+| --------------------------- | -----------------------------------------------|
+| `gdal_version`              | Version of GDAL to build                       |
+| `gdal_build_python_package` | Whether or not to build the Python package     |

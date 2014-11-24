@@ -14,39 +14,42 @@ endif()
 
 set(configure_options
     --prefix=${gdal_prefix}
-    --without-ogr
 )
+
 
 if(${peacock_cross_compiling})
     if(${compiler_id} STREQUAL "mingw")
         if(${target_architecture} STREQUAL "x86_32")
-            set(configure_options
-                ${configure_options}
-                --host=i686-w64-mingw32
-            )
+            set(configure_options ${configure_options}
+                --host=i686-w64-mingw32)
         elseif(${target_architecture} STREQUAL "x86_64")
-            set(configure_options
-                ${configure_options}
-                --host=x86_64-w64-mingw32
-            )
+            set(configure_options ${configure_options}
+                --host=x86_64-w64-mingw32)
         endif()
     endif()
 endif()
+
+
+if(${gdal_build_ogr})
+    set(configure_options ${configure_options} --with-ogr)
+else()
+    set(configure_options ${configure_options} --without-ogr)
+endif()
+
 
 # Set Python_ADDITIONAL_VERSIONS to a list of version numbers that should
 # be taken into account when searching for Python.
 if(${gdal_build_python_package})
     find_package(PythonInterp REQUIRED)
-    set(configure_options
-        ${configure_options}
+    set(configure_options ${configure_options}
         --with-python=${PYTHON_EXECUTABLE}
-
         # Python extension doesn't build when libtool is used.
-        --without-libtool
-    )
+        --without-libtool)
 endif()
 
+
 set(gdal_configure_command ./configure ${configure_options})
+
 
 if(${host_system_name} STREQUAL "windows")
     if(${compiler_id} STREQUAL "mingw")
