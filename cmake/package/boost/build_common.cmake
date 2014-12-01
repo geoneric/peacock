@@ -12,11 +12,7 @@ if(${target_system_name} STREQUAL "darwin")
     if(DEFINED ENV{CXX})
         get_filename_component(cxx $ENV{CXX} ABSOLUTE)
 
-        set(boost_update_command
-            echo "using darwin : : ${cxx} "
-                "!"
-                > ${user_config_jam_filename}
-        )
+        set(user_config "using darwin : : ${cxx} !")
     endif()
 else()
     if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
@@ -37,21 +33,15 @@ else()
                     set(resource_compiler ${base}windres)
                 endif()
 
-                set(boost_update_command
-                    echo "using gcc : : ${cxx} "
-                        ": "
-                        "<rc>${resource_compiler} "
-                        "<archiver>${base}gcc-ar "
-                        "<ranlib>${base}gcc-ranlib "
-                        "!"
-                        > ${user_config_jam_filename}
-                )
+                set(user_config
+                    "using gcc : : ${cxx} "
+                    ": "
+                    "<rc>${resource_compiler} "
+                    "<archiver>${base}gcc-ar "
+                    "<ranlib>${base}gcc-ranlib "
+                    "!")
             else()
-                set(boost_update_command
-                    echo "using gcc : : ${cxx} "
-                        "!"
-                        > ${user_config_jam_filename}
-                )
+                set(user_config "using gcc : : ${cxx} !")
             endif()
         endif()
     elseif((${compiler_id} STREQUAL "clang"))
@@ -60,12 +50,20 @@ else()
 endif()
 
 
+if(${boost_build_boost_python})
+    find_package(PythonInterp REQUIRED)
+    set(bootstrap_options ${bootstrap_options}
+        --with-python=${PYTHON_EXECUTABLE})
+endif()
+
+
 if(${host_system_name} STREQUAL "windows")
     set(boost_url ${boost_url}.zip)  # 7z)
     set(boost_configure_command ./bootstrap.bat ${boost_toolset})
 else()
     set(boost_url ${boost_url}.tar.bz2)
-    set(boost_configure_command ./bootstrap.sh --with-toolset=${boost_toolset})
+    set(boost_configure_command ./bootstrap.sh --with-toolset=${boost_toolset}
+        ${bootstrap_options})
 endif()
 
 
@@ -103,8 +101,6 @@ set(b2_options
     -j ${peacock_processor_count}
     --prefix=${boost_prefix}
     --layout=tagged
-    --without-mpi
-    --without-python
     toolset=${boost_toolset}
     variant=${boost_variant}
     address-model=${boost_address_model}
@@ -112,6 +108,29 @@ set(b2_options
     threading=${boost_threading}
     ${boost_platform_specific_options}
 )
+
+# Only pass --with-<library> or --without-<library> options to b2!
+# ./b2 --show-libraries
+if(${boost_build_boost_filesystem})
+    set(b2_options ${b2_options} --with-filesystem)
+endif()
+if(${boost_build_boost_python})
+    set(b2_options ${b2_options} --with-python)
+endif()
+if(${boost_build_boost_system})
+    set(b2_options ${b2_options} --with-system)
+endif()
+if(${boost_build_boost_test})
+    set(b2_options ${b2_options} --with-test)
+endif()
+if(${boost_build_boost_timer})
+    set(b2_options ${b2_options} --with-timer)
+endif()
+
+
+if(user_config)
+    set(boost_update_command echo ${user_config} > ${user_config_jam_filename})
+endif()
 
 
 set(boost_build_command ./b2 ${b2_options} stage)

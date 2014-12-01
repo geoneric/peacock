@@ -22,9 +22,14 @@ Other platforms may work but have not been tested.
 Package-specific options
 ------------------------
 
-| variable                    | description                                    |
-| --------------------------- | -----------------------------------------------|
-| `boost_version`             | Version of Boost to build                      |
+| variable                       | description                                 |
+| ------------------------------ | --------------------------------------------|
+| `boost_version`                | Version of Boost to build                   |
+| `boost_build_boost_filesystem` | Build filesystem library                    |
+| `boost_build_boost_python`     | Build Python library                        |
+| `boost_build_boost_system`     | Build system library                        |
+| `boost_build_boost_test`       | Build test library                          |
+| `boost_build_boost_timer`      | Build timer library                         |
 
 
 Platform-specific notes
