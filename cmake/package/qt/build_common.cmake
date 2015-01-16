@@ -83,12 +83,34 @@ if(${host_system_name} STREQUAL "windows")
         # Install on Windows.
         # http://stackoverflow.com/questions/4699311/how-to-install-qt-on-windows-after-building
         COMMAND ${CMAKE_MAKE_PROGRAM} clean  # Will remove pdb's too!
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/..
-        COMMAND ${CMAKE_COMMAND} -E copy_directory .. ${qt_prefix}
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/bin
+        COMMAND bash -c "cp -r bin/* ${qt_prefix}/bin"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/include
+        COMMAND bash -c "cp -r include/* ${qt_prefix}/include"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/lib
+        COMMAND bash -c "cp -r lib/* ${qt_prefix}/lib"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/mkspecs
+        COMMAND bash -c "cp -r mkspecs/* ${qt_prefix}/mkspecs"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/plugins
+        COMMAND bash -c "cp -r plugins/* ${qt_prefix}/plugins"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/src
+        COMMAND bash -c "cp -r src/* ${qt_prefix}/src"
+
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/tools
+        COMMAND bash -c "cp -r tools/* ${qt_prefix}/tools
+
         COMMAND ${CMAKE_COMMAND} -E echo "[Paths]"
-            > ${qt_prefix}/qt-${qt_version}/bin/qt.conf
+            > ${qt_prefix}/bin/qt.conf
         COMMAND ${CMAKE_COMMAND} -E echo_append "Prefix=.."
-            >> ${qt_prefix}/qt-${qt_version}/bin/qt.conf
+            >> ${qt_prefix}/bin/qt.conf
 
         DEPENDEES build
         WORKING_DIRECTORY <SOURCE_DIR>
