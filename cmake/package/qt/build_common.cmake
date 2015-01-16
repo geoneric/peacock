@@ -11,24 +11,21 @@ set(qt_prefix ${peacock_package_prefix})
 
 
 if(${host_system_name} STREQUAL "windows")
-    set(qt_url ${qt_url}.zip)  # 7z)
+    set(qt_url ${qt_url}.zip)
 else()
     set(qt_url ${qt_url}.tar.gz)
 endif()
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
+
 
 if(${target_system_name} STREQUAL "windows")
-    set(qt_make_spec win32-g++)
+    set(qt_configure_command ./configure.exe)
     set(configure_arguments
         -debug-and-release
     )
 else()
-    if(${target_architecture} STREQUAL "x86_32")
-        set(qt_address_model "32")
-    else()
-        set(qt_address_model "64")
-    endif()
-    set(qt_make_spec linux-g++-${qt_address_model})
+    set(qt_configure_command ./configure)
     set(configure_arguments
         -release
         -prefix ${qt_prefix}
@@ -57,7 +54,8 @@ set(configure_arguments
     -nomake demos
 )
 
-set(qt_configure_command ./configure ${configure_arguments})
+
+set(qt_configure_command ${qt_configure_command} ${configure_arguments})
 
 
 ExternalProject_Add(qt-${qt_version}
@@ -68,3 +66,21 @@ ExternalProject_Add(qt-${qt_version}
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND ${qt_configure_command}
 )
+
+
+if(${host_system_name} STREQUAL "windows")
+    ExternalProject_Add_Step(qt-${qt_version} qt_install
+
+        # Install on Windows.
+        # http://stackoverflow.com/questions/4699311/how-to-install-qt-on-windows-after-building
+        # COMMAND ${CMAKE_MAKE_PROGRAM} clean  # Will remove pdb's too!
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/..
+        COMMAND ${CMAKE_COMMAND} -E copy_directory .. ${qt_prefix}
+        COMMAND ${CMAKE_COMMAND} -E echo "[Paths]" > ${qt_prefix}/bin/qt.conf
+        COMMAND ${CMAKE_COMMAND} -E echo_append "Prefix=.."
+            >> ${qt_prefix}/bin/qt.conf
+
+        DEPENDEES build
+        WORKING_DIRECTORY <SOURCE_DIR>
+    )
+endif()
