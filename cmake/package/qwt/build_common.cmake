@@ -12,14 +12,17 @@ endif()
 
 find_program(qt_qmake qmake HINTS ${peacock_package_prefix}/bin)
 
-# TODO Load macro from script in ../qt dir.
-set(qt_make_spec linux-g++-64)
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
 
 set(qwt_build_command ${qt_qmake} -spec ${qt_make_spec} qwt.pro)
 
+if(qt_build)
+    set(qwt_dependencies qt-${qt_version})
+endif()
+
 
 ExternalProject_Add(qwt-${qwt_version}
+    DEPENDS ${qwt_dependencies}
     LIST_SEPARATOR !
     DOWNLOAD_DIR ${peacock_download_dir}
     URL ${qwt_url}
