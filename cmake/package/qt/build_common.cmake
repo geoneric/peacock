@@ -57,6 +57,13 @@ set(configure_arguments
 
 set(qt_configure_command ${qt_configure_command} ${configure_arguments})
 
+if(${host_system_name} STREQUAL "windows")
+    # Don't do anything at install time.
+    # The default seems to build qt a second time. There is no install
+    # target on Windows. See explicit install steps below.
+    set(qt_install_command echo Skipping install)
+endif()
+
 
 ExternalProject_Add(qt-${qt_version}
     LIST_SEPARATOR !
@@ -65,6 +72,8 @@ ExternalProject_Add(qt-${qt_version}
     URL_MD5 ${qt_url_md5}
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND ${qt_configure_command}
+    BUILD_COMMAND ${qt_build_command}
+    INSTALL_COMMAND ${qt_install_command}
 )
 
 
@@ -73,12 +82,13 @@ if(${host_system_name} STREQUAL "windows")
 
         # Install on Windows.
         # http://stackoverflow.com/questions/4699311/how-to-install-qt-on-windows-after-building
-        # COMMAND ${CMAKE_MAKE_PROGRAM} clean  # Will remove pdb's too!
+        COMMAND ${CMAKE_MAKE_PROGRAM} clean  # Will remove pdb's too!
         COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/..
         COMMAND ${CMAKE_COMMAND} -E copy_directory .. ${qt_prefix}
-        COMMAND ${CMAKE_COMMAND} -E echo "[Paths]" > ${qt_prefix}/bin/qt.conf
+        COMMAND ${CMAKE_COMMAND} -E echo "[Paths]"
+            > ${qt_prefix}/qt-${qt_version}/bin/qt.conf
         COMMAND ${CMAKE_COMMAND} -E echo_append "Prefix=.."
-            >> ${qt_prefix}/bin/qt.conf
+            >> ${qt_prefix}/qt-${qt_version}/bin/qt.conf
 
         DEPENDEES build
         WORKING_DIRECTORY <SOURCE_DIR>
