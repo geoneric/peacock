@@ -2,8 +2,6 @@ Peacock
 =======
 Software for building external projects.
 
-**Very much work in progress!**
-
 Most software depends on external software. When building such software, those external software packages must be installed first. Often they are installed already or can be installed easily using package managers. Sometimes this is not the case, though.
 
 This project tries to make it easy to install specific versions of external software. It uses [CMake](http://www.cmake.org) to manage the builds. Here is an example command for building the latest version of [Boost](http://www.boost.org) supported by Peacock:
