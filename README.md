@@ -19,23 +19,60 @@ This command will configure, build and install Boost. The results will be instal
 
 Usage
 -----
-Peacock consists of a collection of CMake script files that manage the build of requested software packages. The first thing to do is to configure the Peacock build. At the very least you need to tell Peacock which packages you want to build. Packages can be selected by passing `-Dbuild_<package>=true` to the `cmake` command. This will add the package to the build. Most packages allow you to tweak their builds by passing additional, package-specific, configuration options. All packages support the `<package>_version` option to select one of the supported versions. Here is an example of building boost version 1.56:
+Peacock consists of a collection of CMake script files that manage the build of requested software packages. The first thing to do is to configure the Peacock build. At the very least you need to tell Peacock which packages you want to build. Packages can be selected by passing `-Dbuild_<package>=true` to the `cmake` command. This will add the package to the build. Most packages allow you to tweak their builds by passing additional, package-specific, configuration options. All packages support the `<package>_version` option to select one of the supported versions. If you don't ask for a specific version of a package, Peacock will select the latest version that it knows of. Here is an example of building boost version 1.56:
 
 ```bash
 cmake -Dbuild_boost=true -Dboost_version=1.56.0 <path_to>/peacock
 ```
 
+In general, Peacock builds packages with optional features turned off. If you need a specific feature, you have to explicitly ask for it. For example, here is an example of building Boost with support for the unit testing framework:
+
+```bash
+cmake -Dbuild_boost=true -Dboost_build_boost_test=true <path_to>/peacock
+```
+
+
 General options
 ---------------
-Package-specific options are documented in the [package-specific documentation](cmake/package/README.md).
-
 | variable                  | description                                      |
 | ------------------------- | ------------------------------------------------ |
 | `peacock_download_dir`    | Directory for downloaded files                   |
 | `peacock_prefix`          | Directory for installing files                   |
 | `peacock_verbose`         | Print extra (debug) output                       |
 
+As described above, the prefix directory is the root of a directory tree where the software is installed. This tree is named after host and target architecture, and is unique for each combination thereof. This way, a single prefix directory can contain software built for various target architectures. An example directory layout looks like this:
+
+    <peacock_prefix>
+        /linux
+            /linux
+                /gcc-4
+                    /x86_32
+                        /{bin,include,lib,...}
+                    /x86_64
+                        /{bin,include,lib,...}
+        /linux
+            /windows
+                /mingw-4
+                    /x86_32
+                        /{bin,include,lib,...}
+                    /x86_64
+                        /{bin,include,lib,...}
+        /windows
+            /windows
+                /mingw-4
+                    /x86_32
+                        /{bin,include,lib,...}
+                    /x86_64
+                        /{bin,include,lib,...}
+
+A [CMake script](cmake/PeacockPlatform.cmake) is provided that determines the name of the target-platform specific directory. This script can be used to configure projects using the 3rd party software. More documentation can be found in the [README.md](cmake/README.md).
+
 Peacock will pick up `$CC` and `$CXX`, and forward them to the build scripts of the packages.
+
+
+Package-specific options
+------------------------
+Package-specific options are documented in the [package-specific documentation](cmake/package/README.md).
 
 
 Platform-specific notes

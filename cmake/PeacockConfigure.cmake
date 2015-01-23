@@ -10,6 +10,23 @@ message(STATUS "peacock: verbose              : ${peacock_verbose}")
 # Iterate over all packages and load each package's configuration settings.
 file(GLOB filenames RELATIVE ${peacock_package_dir} ${peacock_package_dir}/*)
 
+# TODO Here we list the packages explicitly, overwriting what globbing found.
+#      This is needed because the packages are built in order. Some packages
+#      depend on other packages: qwt depends on qt, fern depends on boost.
+#      For these packages it is required that the build script of the packages
+#      they depend on is loaded before their own build script. Otherwise
+#      the target they want to depend on doesn't exist yet.
+#      Somehow we should figure out the order in which package build scripts
+#      should be loaded.
+set(filenames
+    pcraster_raster_format
+    boost
+    qt
+    qwt
+    gdal
+    fern
+)
+
 foreach(package_name ${filenames})
     set(filename ${peacock_package_dir}/${package_name}/configure.cmake)
 

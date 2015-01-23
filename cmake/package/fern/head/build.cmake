@@ -1,27 +1,27 @@
-set(prefix ${peacock_package_prefix})
+set(fern_prefix ${peacock_package_prefix})
 
 
-set(cmake_args ${cmake_args}
-    -DCMAKE_INSTALL_PREFIX:PATH=${prefix})
+set(fern_cmake_args ${fern_cmake_args}
+    -DCMAKE_INSTALL_PREFIX:PATH=${fern_prefix})
 
 if(CMAKE_MAKE_PROGRAM)
-    set(cmake_args ${cmake_args}
+    set(fern_cmake_args ${fern_cmake_args}
         -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM})
 endif()
 
 if(fern_build_fern_algorithm)
-    set(cmake_args ${cmake_args}
+    set(fern_cmake_args ${fern_cmake_args}
         -DFERN_ALGORITHM:BOOL=TRUE)
 endif()
 
 if(build_boost)
-    set(cmake_args ${cmake_args}
+    set(fern_cmake_args ${fern_cmake_args}
         -DBOOST_ROOT:PATH=${boost_prefix})
-    set(dependencies boost-${boost_version})
+    set(fern_dependencies boost-${boost_version})
 endif()
 
 
-set(patch_command
+set(fern_patch_command
     COMMAND sed -i.tmp
         "s|ADD_SUBDIRECTORY(document)|# ADD_SUBDIRECTORY(document)|"
             CMakeLists.txt
@@ -49,14 +49,14 @@ function(add_external_project)
     set(fern_target fern-${fern_version}-${build_type})
 
     ExternalProject_Add(${fern_target}
-        DEPENDS ${dependencies}
+        DEPENDS ${fern_dependencies}
         LIST_SEPARATOR !
         DOWNLOAD_DIR ${peacock_download_dir}
         GIT_REPOSITORY ${fern_git_repository}
         GIT_TAG ${fern_git_tag}
         BUILD_IN_SOURCE 1
-        CMAKE_ARGS ${cmake_args} -DCMAKE_BUILD_TYPE=${build_type}
-        PATCH_COMMAND ${patch_command}
+        CMAKE_ARGS ${fern_cmake_args} -DCMAKE_BUILD_TYPE=${build_type}
+        PATCH_COMMAND ${fern_patch_command}
         # TODO This requires updated path settings.
         # TEST_BEFORE_INSTALL 1
     )

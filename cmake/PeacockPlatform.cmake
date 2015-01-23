@@ -1,3 +1,12 @@
+# This script determines the characteristics of the host and target platforms
+# and normalizes the names. The resulting variables can be used in the package
+# build scripts and in configuring external projects.
+# At the bottom is a list of the variables set by this script.
+# This script depends on TargetArch script, so when using it to configure
+# external projects, make sure to checkout that script as well.
+# See the README.md for some more information, including the list of
+# normalized names.
+
 set(host_system_name ${CMAKE_HOST_SYSTEM_NAME})
 set(target_system_name ${CMAKE_SYSTEM_NAME})
 set(compiler_id ${CMAKE_CXX_COMPILER_ID})
@@ -89,6 +98,62 @@ else()
 endif()
 
 
+# Set a variable to the host specification as used by some build scripts.
+# In Gcc's terms, host is the same as what is called target here. It is the
+# machine running the software. In Peacock's terminology, host is the machine
+# building the software. Sigh...
+# https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html
+#
+# +---------+---------+--------+
+# | Tool    | Builder | Runner |
+# +---------+---------+--------+
+# | Peacock | host    | target |
+# | Gcc     | build   | host   |
+# +---------+---------+--------+
+
+
+
+if(${target_architecture} STREQUAL "x86_32")
+    if(${target_system_name} STREQUAL "linux")
+        message(FATAL_ERROR Add "configure host")
+    elseif(${target_system_name} STREQUAL "windows")
+        if(${compiler_id} STREQUAL "mingw")
+            set(peacock_gnu_configure_host "i686-w64-mingw32")
+        else()
+            message(FATAL_ERROR "Add GNU configure host")
+        endif()
+    elseif(${target_system_name} STREQUAL "cygwin")
+        message(FATAL_ERROR "Add GNU configure host")
+    else()
+        message(FATAL_ERROR "Add GNU configure host")
+    endif()
+elseif(${target_architecture} STREQUAL "x86_64")
+    if(${target_system_name} STREQUAL "linux")
+        if(${compiler_id} STREQUAL "gcc")
+            set(peacock_gnu_configure_host "x86_64-unknown-linux")
+        else()
+            message(FATAL_ERROR "Add GNU configure host")
+        endif()
+    elseif(${target_system_name} STREQUAL "windows")
+        if(${compiler_id} STREQUAL "mingw")
+            set(peacock_gnu_configure_host "x86_64-w64-mingw32")
+        else()
+            message(FATAL_ERROR "Add GNU configure host")
+        endif()
+    elseif(${target_system_name} STREQUAL "cygwin")
+        message(FATAL_ERROR Add "configure host spec")
+    else()
+        message(FATAL_ERROR "Add GNU configure host for system/target: "
+            "${target_system_name}/${target_architecture}")
+    endif()
+endif()
+
+
+
+# TODO build_spec:
+# - i686-pc-cygwin
+
+
 message(STATUS "peacock: cross_compiling      : " ${peacock_cross_compiling})
 message(STATUS "peacock: host_system_name     : " ${host_system_name})
 message(STATUS "peacock: target_system_name   : " ${target_system_name})
@@ -97,3 +162,4 @@ message(STATUS "peacock: compiler_id          : " ${compiler_id})
 message(STATUS "peacock: compiler_version     : " ${compiler_version})
 message(STATUS "peacock: compiler_main_version: " ${compiler_main_version})
 message(STATUS "peacock: target_platform      : " ${peacock_target_platform})
+message(STATUS "peacock: gnu_configure_host   : " ${peacock_gnu_configure_host})

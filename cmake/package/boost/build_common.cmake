@@ -85,9 +85,6 @@ else()
 endif()
 
 
-set(boost_link "shared")
-set(boost_threading "multi")
-
 if(${target_architecture} STREQUAL "x86_32")
     set(boost_address_model "32")
 else()
@@ -95,17 +92,27 @@ else()
 endif()
 
 
+if(peacock_verbose)
+    set(b2_options
+        --debug-configuration
+        --debug-building
+        -d1)
+else()
+    set(b2_options
+        -d0)
+endif()
+
 set(b2_options
+    ${b2_options}
     -q  # When an error occurs, stop ASAP.
-    --debug-configuration
     -j ${peacock_processor_count}
     --prefix=${boost_prefix}
     --layout=tagged
     toolset=${boost_toolset}
     variant=${boost_variant}
     address-model=${boost_address_model}
-    link=${boost_link}
-    threading=${boost_threading}
+    link=shared
+    threading=multi
     ${boost_platform_specific_options}
 )
 
@@ -148,18 +155,3 @@ ExternalProject_Add(boost-${boost_version}
     BUILD_COMMAND ${boost_build_command}
     INSTALL_COMMAND ${boost_install_command}
 )
-
-
-# if(${host_system_name} STREQUAL "windows")
-#     if(${compiler_id} STREQUAL "mingw")
-#         ExternalProject_Add_Step(boost-${boost_version} fix_bootstrap
-# 
-#             # bootstrap.bat has the msvc toolset hardcoded.
-#             COMMAND sed -i.tmp "s|toolset=msvc|toolset=${boost_toolset}|"
-#                 bootstrap.bat
-# 
-#             DEPENDEES update
-#             WORKING_DIRECTORY <SOURCE_DIR>
-#         )
-#     endif()
-# endif()

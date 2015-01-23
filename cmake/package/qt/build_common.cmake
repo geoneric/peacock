@@ -21,12 +21,12 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
 
 if(${target_system_name} STREQUAL "windows")
     set(qt_configure_command ./configure.exe)
-    set(configure_arguments
+    set(qt_configure_arguments
         -debug-and-release
     )
 else()
     set(qt_configure_command ./configure)
-    set(configure_arguments
+    set(qt_configure_arguments
         -release
         -prefix ${qt_prefix}
     )
@@ -36,8 +36,12 @@ endif()
 # -xplatform ...
 # See README file for list of supported OS' and compilers.
 
-set(configure_arguments
-    ${configure_arguments}
+# TODO Qwt's Designer plugin fails because Qt doesn't support for plugins(?).
+#      Figure out how the build must be fixed to support Qwt's Designer
+#      plugin.
+
+set(qt_configure_arguments
+    ${qt_configure_arguments}
     -opensource
     -confirm-license
     -platform ${qt_make_spec}
@@ -55,31 +59,14 @@ set(configure_arguments
 )
 
 
-set(qt_configure_command ${qt_configure_command} ${configure_arguments})
+set(qt_configure_command ${qt_configure_command} ${qt_configure_arguments})
 
 if(${host_system_name} STREQUAL "windows")
     # Don't do anything at install time.
     # The default seems to build qt a second time. There is no install
     # target on Windows. See explicit install steps below.
-    set(qt_install_command echo Skipping install)
-endif()
 
-
-ExternalProject_Add(qt-${qt_version}
-    LIST_SEPARATOR !
-    DOWNLOAD_DIR ${peacock_download_dir}
-    URL ${qt_url}
-    URL_MD5 ${qt_url_md5}
-    BUILD_IN_SOURCE 1
-    CONFIGURE_COMMAND ${qt_configure_command}
-    BUILD_COMMAND ${qt_build_command}
-    INSTALL_COMMAND ${qt_install_command}
-)
-
-
-if(${host_system_name} STREQUAL "windows")
-    ExternalProject_Add_Step(qt-${qt_version} qt_install
-
+    set(qt_install_command
         # Install on Windows.
         # http://stackoverflow.com/questions/4699311/how-to-install-qt-on-windows-after-building
         COMMAND ${CMAKE_MAKE_PROGRAM} clean  # Will remove pdb's too!
@@ -105,14 +92,23 @@ if(${host_system_name} STREQUAL "windows")
         COMMAND bash -c "cp -r src/* ${qt_prefix}/src"
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${qt_prefix}/tools
-        COMMAND bash -c "cp -r tools/* ${qt_prefix}/tools
+        COMMAND bash -c "cp -r tools/* ${qt_prefix}/tools"
 
         COMMAND ${CMAKE_COMMAND} -E echo "[Paths]"
             > ${qt_prefix}/bin/qt.conf
         COMMAND ${CMAKE_COMMAND} -E echo_append "Prefix=.."
             >> ${qt_prefix}/bin/qt.conf
-
-        DEPENDEES build
-        WORKING_DIRECTORY <SOURCE_DIR>
     )
 endif()
+
+
+ExternalProject_Add(qt-${qt_version}
+    LIST_SEPARATOR !
+    DOWNLOAD_DIR ${peacock_download_dir}
+    URL ${qt_url}
+    URL_MD5 ${qt_url_md5}
+    BUILD_IN_SOURCE 1
+    CONFIGURE_COMMAND ${qt_configure_command}
+    BUILD_COMMAND ${qt_build_command}
+    INSTALL_COMMAND ${qt_install_command}
+)
