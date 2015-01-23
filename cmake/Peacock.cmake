@@ -1,3 +1,4 @@
+include(CMakeParseArguments)
 include(ExternalProject)
 include(ProcessorCount)
 

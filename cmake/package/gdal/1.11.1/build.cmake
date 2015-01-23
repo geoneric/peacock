@@ -12,28 +12,17 @@ else()
 endif()
 
 
-set(configure_options
+set(gdal_configure_options
+    ${gdal_configure_options}
     --prefix=${gdal_prefix}
+    --without-libtool
+    --host=${peacock_gnu_configure_host}
 )
 
-
-if(${peacock_cross_compiling})
-    if(${compiler_id} STREQUAL "mingw")
-        if(${target_architecture} STREQUAL "x86_32")
-            set(configure_options ${configure_options}
-                --host=i686-w64-mingw32)
-        elseif(${target_architecture} STREQUAL "x86_64")
-            set(configure_options ${configure_options}
-                --host=x86_64-w64-mingw32)
-        endif()
-    endif()
-endif()
-
-
 if(${gdal_build_ogr})
-    set(configure_options ${configure_options} --with-ogr)
+    set(gdal_configure_options ${gdal_configure_options} --with-ogr)
 else()
-    set(configure_options ${configure_options} --without-ogr)
+    set(gdal_configure_options ${gdal_configure_options} --without-ogr)
 endif()
 
 
@@ -41,77 +30,111 @@ endif()
 # be taken into account when searching for Python.
 if(${gdal_build_python_package})
     find_package(PythonInterp REQUIRED)
-    set(configure_options ${configure_options}
+    set(gdal_configure_options ${gdal_configure_options}
         --with-python=${PYTHON_EXECUTABLE}
-        # Python extension doesn't build when libtool is used.
-        --without-libtool)
+    )
 endif()
-
-
-set(gdal_configure_command ./configure ${configure_options})
-
-
-if(${host_system_name} STREQUAL "windows")
-    if(${compiler_id} STREQUAL "mingw")
-        set(gdal_build_command mingw32-make -j${peacock_processor_count})
-    endif()
-endif()
-
-
-ExternalProject_Add(gdal-${gdal_version}
-    LIST_SEPARATOR !
-    DOWNLOAD_DIR ${peacock_download_dir}
-    URL ${gdal_url}
-    URL_MD5 ${gdal_url_md5}
-    BUILD_IN_SOURCE 1
-    CONFIGURE_COMMAND ${gdal_configure_command}
-    BUILD_COMMAND ${gdal_build_command}
-)
 
 
 # On certain platforms, we need to edit some files before starting the build.
 if(${host_system_name} STREQUAL "windows")
     if(${compiler_id} STREQUAL "mingw")
-        set(configure_options
-            ${configure_options}
-            --host=x86_64-w64-mingw32
-            --build=x86_64-w64-mingw32
+        set(gdal_configure_options
+          ${gdal_configure_options}
+          --with-curl=no
+          --with-threads=no
         )
 
-        # We assume here that GNU sed is available.
-        # TODO Find sed and bail out if not available.
-
-        # When the mingw compiler is used on Windows, the GDALmake.opt script
-        # contains a Unix-style path to the root of the GDAL sources.
-        # We need to replace this by a Windows-style path.
-        ExternalProject_Add_Step(gdal-${gdal_version} port_pathname
-
-            # Comment out GDAL_ROOT with Unix-style path.
-            COMMAND sed -i.tmp "1s|^|# |" GDALmake.opt
-
+        set(gdal_patch_command
             # Insert GDAL_ROOT with Windows-style path.
-            COMMAND sed -i.tmp "2s|^|GDAL_ROOT = <SOURCE_DIR>\\n|" GDALmake.opt
+            COMMAND sed -i.tmp "s|@abs_top_builddir@|<SOURCE_DIR>\\n|"
+                GDALmake.opt.in
 
-            # Link errors, GetACP.
-            # http://stackoverflow.com/questions/16558813/link-error-with-getacp-under-mingw64-mingw-builds
-            COMMAND sed -i.tmp "517s|$| -liconv|" GDALmake.opt
-
-            # Comment out part of the command that confuses libtool.
-            COMMAND sed -i.tmp "41s| -DINST_DATA=.*$| \\\\\\|"
-                gcore/GNUmakefile
-
-            # TODO Determine the path to the compiler and use that instead
-            #      of hardcoding it.
-            set(compiler_root "C:/mingw64/bin")
-
-            # Point to mingw's ar.
-            COMMAND sed -i.tmp "144s|ar|${compiler_root}/ar|" libtool
-
-            # Point to mingw's ranlib.
-            COMMAND sed -i.tmp "156s|ranlib|${compiler_root}/ranlib|" libtool
-
-            DEPENDEES configure
-            WORKING_DIRECTORY <SOURCE_DIR>
+            # Work around "Argument list too long" error by ar.exe, by
+            # removing the path to the current directory from the list
+            # of object files.
+            COMMAND sed -i.tmp "4,7s|^|# |" GNUmakefile
+            COMMAND sed -i.tmp
+                "8i GDAL_OBJ = ./frmts/o/*.o ./gcore/*.o ./port/*.o ./alg/*.o"
+                GNUmakefile
         )
     endif()
+endif()
+
+
+set(gdal_configure_command ./configure ${gdal_configure_options})
+
+
+# ExternalProject_Add(gdal-${gdal_version}
+#     LIST_SEPARATOR !
+#     DOWNLOAD_DIR ${peacock_download_dir}
+#     URL ${gdal_url}
+#     URL_MD5 ${gdal_url_md5}
+#     BUILD_IN_SOURCE 1
+#     PATCH_COMMAND ${gdal_patch_command}
+#     CONFIGURE_COMMAND ${gdal_configure_command}
+# )
+
+
+add_custom_target(gdal-${gdal_version})
+
+
+function(add_external_project)
+    set(options "")
+    set(one_value_arguments BUILD_TYPE)
+    set(multi_value_arguments PATCH_COMMAND CONFIGURE_COMMAND)
+
+    cmake_parse_arguments(add_external_project "${options}"
+        "${one_value_arguments}" "${multi_value_arguments}" ${ARGN})
+
+    if(add_external_project_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR
+            "Macro called with unrecognized arguments: "
+            "${add_external_project_UNPARSED_ARGUMENTS}")
+    endif()
+
+    set(build_type ${add_external_project_BUILD_TYPE})
+    set(gdal_patch_command ${add_external_project_PATCH_COMMAND})
+    set(gdal_configure_command ${add_external_project_CONFIGURE_COMMAND})
+    set(target gdal-${gdal_version}-${build_type})
+
+    ExternalProject_Add(${target}
+        LIST_SEPARATOR !
+        DOWNLOAD_DIR ${peacock_download_dir}
+        URL ${gdal_url}
+        URL_MD5 ${gdal_url_md5}
+        BUILD_IN_SOURCE 1
+        PATCH_COMMAND ${gdal_patch_command}
+        CONFIGURE_COMMAND ${gdal_configure_command}
+    )
+
+    add_dependencies(gdal-${gdal_version} ${target})
+endfunction()
+
+
+add_external_project(
+    BUILD_TYPE Release
+    PATCH_COMMAND ${gdal_patch_command}
+    CONFIGURE_COMMAND ${gdal_configure_command}
+)
+
+
+if(WIN32 AND NOT CMAKE_CONFIGURATION_TYPES)
+    # Enable debugging and make sure the name of the debug library has a
+    # trailing 'd'.
+    add_external_project(
+        BUILD_TYPE Debug
+        PATCH_COMMAND ${gdal_patch_command}
+            COMMAND sed -i.tmp "s|libgdal|libgdald|g" GDALmake.opt.in
+            COMMAND sed -i.tmp "s|-lgdal|-lgdald|g" GDALmake.opt.in
+        CONFIGURE_COMMAND ${gdal_configure_command} --enable-debug
+    )
+
+    # First build and install the debug build and after that the release
+    # build. We want some of the debug stuff to be overwritten by the
+    # release stuff (executables). We only want the debug libraries to be
+    # added.
+    add_dependencies(
+        gdal-${gdal_version}-Release
+        gdal-${gdal_version}-Debug)
 endif()
