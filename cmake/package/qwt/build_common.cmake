@@ -29,18 +29,28 @@ set(qwt_patch_command
             qwtconfig.pri
 )
 
-find_program(qwt_qmake qmake HINTS ${peacock_package_prefix}/bin)
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
-
-set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} qwt.pro)
 
 if(build_qt)
     # If we are building Qt also, then make sure this Qwt is built after Qt
     # has finished building. Otherwise, it may pick up another Qt
     # installation.
     set(qwt_dependencies qt-${qt_version})
+
+    # Building Qt. Set variable to the qmake that will be there once Qt is
+    # built (it may be busy building right now and not finished installing
+    # qmake). Dependency settings make sure Qwt doest not start building
+    # before Qt has finished installing.
+    set(qwt_qmake ${peacock_package_prefix}/bin/qmake)
+else()
+    # Not building Qt. We provide a hint to the directory where Qt's qmake
+    # would be installed if we were building Qt. This is handy if Qt is build
+    # in a previous run, and we want to pick it up.
+    find_program(qwt_qmake qmake HINTS ${peacock_package_prefix}/bin)
 endif()
+
+
+set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} qwt.pro)
 
 
 ExternalProject_Add(qwt-${qwt_version}
