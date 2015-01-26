@@ -4,5 +4,13 @@ else()
     set(qwt_url_md5 9c88db1774fa7e3045af063bbde44d7d)
 endif()
 
+set(qwt_prefix ${peacock_package_prefix})
+
+set(qwt_patch_command
+    # Our install prefix.
+    COMMAND sed -i.tmp "30s|^|QWT_INSTALL_PREFIX = ${qwt_prefix}|"
+        qwtconfig.pri
+)
+
 set(filename ${peacock_package_dir}/qwt/build_common.cmake)
 include(${filename})

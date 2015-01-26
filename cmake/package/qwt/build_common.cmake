@@ -11,12 +11,7 @@ endif()
 
 
 set(qwt_patch_command
-    # TODO These commands are possibly version dependent. Move into version-
-    #      specific build script that is calling us.
-
-    # Our install prefix.
-    COMMAND sed -i.tmp "30s|^|QWT_INSTALL_PREFIX = ${qwt_prefix}|"
-        qwtconfig.pri
+    ${qwt_patch_command}
 
     # We don't have svg support.
     COMMAND sed -i.tmp
@@ -28,6 +23,7 @@ set(qwt_patch_command
         "s!QWT_CONFIG     += QwtDesigner!# QWT_CONFIG     += QwtDesigner!"
             qwtconfig.pri
 )
+
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
 
