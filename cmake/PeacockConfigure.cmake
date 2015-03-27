@@ -21,6 +21,7 @@ file(GLOB filenames RELATIVE ${peacock_package_dir} ${peacock_package_dir}/*)
 set(filenames
     pcraster_raster_format
     boost
+    hpx
     qt
     qwt
     gdal
