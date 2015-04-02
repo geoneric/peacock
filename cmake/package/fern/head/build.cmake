@@ -54,7 +54,7 @@ function(add_external_project)
         DOWNLOAD_DIR ${peacock_download_dir}
         GIT_REPOSITORY ${fern_git_repository}
         GIT_TAG ${fern_git_tag}
-        BUILD_IN_SOURCE 1
+        BUILD_IN_SOURCE FALSE
         CMAKE_ARGS ${fern_cmake_args} -DCMAKE_BUILD_TYPE=${build_type}
         PATCH_COMMAND ${fern_patch_command}
         # TODO This requires updated path settings.
