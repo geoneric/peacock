@@ -1,0 +1,10 @@
+if(${host_system_name} STREQUAL "windows")
+    set(hdf5_url_md5 ???)
+    set(hdf5_zip_extension zip)
+else()
+    set(hdf5_url_md5 719df6d46eea52e42dd97d59dcbf5311)
+    set(hdf5_zip_extension tar.bz2)
+endif()
+
+set(filename ${peacock_package_dir}/hdf5/build_common.cmake)
+include(${filename})

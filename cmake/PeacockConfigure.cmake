@@ -21,11 +21,12 @@ file(GLOB filenames RELATIVE ${peacock_package_dir} ${peacock_package_dir}/*)
 set(filenames
     pcraster_raster_format
     boost
-    hpx
+    hdf5
+    hpx  # Depends on hdf5.
     qt
     qwt
-    gdal
-    fern
+    gdal  # Depends on hdf5.
+    fern  # Depends on hdf5.
 )
 
 foreach(package_name ${filenames})
