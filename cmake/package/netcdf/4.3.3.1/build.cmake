@@ -20,7 +20,7 @@ set(netcdf_cmake_args
 )
 
 
-if(${host_system_name} STREQUAL "windows")
+if(${target_system_name} STREQUAL "windows")
     set(netcdf_cmake_args
         ${netcdf_cmake_args}
         ENABLE_DLL:BOOL=ON
