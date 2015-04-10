@@ -11,3 +11,15 @@ Supported platforms
 | linux         | linux           | gcc, 4.9 | x86-64       |
 
 Other platforms may work but have not been tested.
+
+
+Package-specific options
+------------------------
+
+| variable                       | description                                 |
+| ------------------------------ | --------------------------------------------|
+| `netcdf_version`               | Version of NetCDF to build                  |
+
+
+Platform-specific notes
+-----------------------

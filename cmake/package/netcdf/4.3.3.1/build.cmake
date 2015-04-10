@@ -28,10 +28,6 @@ if(${host_system_name} STREQUAL "windows")
 endif()
 
 
-# set(build_hdf5 ON)
-# set(hdf5_version 1.8.14)
-# set(hdf5_prefix ${peacock_package_prefix})
-
 if(build_hdf5)
     set(netcdf_dependencies hdf5-${hdf5_version})
 
