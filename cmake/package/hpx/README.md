@@ -1,5 +1,5 @@
-Boost
-=====
+HPX
+===
 http://stellar-group.org/libraries/hpx
 
 
@@ -27,7 +27,3 @@ Platform-specific notes
 **Linux**
 
 Use the package manager to install `hwloc-dev` and `libgoogle-perftools-dev`.
-
-
-
-
