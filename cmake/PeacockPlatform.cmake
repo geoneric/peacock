@@ -111,6 +111,9 @@ endif()
 # | Gcc     | build   | host   |
 # +---------+---------+--------+
 
+# See also:
+# - http://www.cmake.org/cmake/help/v3.0/module/GNUInstallDirs.html
+# - https://wiki.debian.org/Multiarch
 
 
 if(${target_architecture} STREQUAL "x86_32")

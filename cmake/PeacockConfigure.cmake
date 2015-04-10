@@ -22,12 +22,14 @@ set(filenames
     pcraster_raster_format
     boost
     hdf5
-    hpx  # Depends on hdf5.
+    hpx     # Depends on boost, hdf5.
     qt
-    qwt
-    gdal  # Depends on hdf5.
-    fern  # Depends on hdf5.
+    qwt     # Depends on qt.
+    netcdf  # Depends on hdf5.
+    gdal    # Depends on hdf5, netcdf.
+    fern    # Depends on boost, hdf5, hpx, netcdf, gdal.
 )
+
 
 foreach(package_name ${filenames})
     set(filename ${peacock_package_dir}/${package_name}/configure.cmake)
