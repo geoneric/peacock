@@ -12,23 +12,36 @@ Additionally, we must test whether we need to build packages for both debug and 
 
 Variables set
 -------------
-|  variable               | description |
-| ---------------------------- | ----------- |
-| `peacock_cross_compiling`    | TODO        |
-| `host_system_name`           | TODO        |
-| `target_system_name`         | TODO        |
-| `target_architecture`        | TODO        |
-| `compiler_id`                | TODO        |
-| `compiler_version`           | TODO        |
-| `compiler_main_version`      | TODO        |
-| `peacock_target_platform`    | TODO        |
-| `peacock_gnu_configure_host` | TODO        |
+|  variable                    | description                           |
+| ---------------------------- | ------------------------------------- |
+| `peacock_cross_compiling`    | Whether or not we are cross-compiling |
+| `host_system_name`           | Name of OS of host system             |
+| `target_system_name`         | Name of OS of target system           |
+| `target_architecture`        | Architecture of target system         |
+| `compiler_id`                | Name of compiler                      |
+| `compiler_version`           | Compiler version                      |
+| `compiler_main_version`      | Main compiler version                 |
+| `peacock_target_platform`    | Name of target platform               |
+| `peacock_gnu_configure_host` | Name of host, per GNU conventions     |
 
 
 Normalized names
 ----------------
-host and target system names: linux, darwin, cygwin, windows
+Host and target system names:
 
-host and target architectures: x86_32, x86_64
+- linux
+- darwin
+- cygwin (implies Windows)
+- windows
 
-compilers: clang, gcc, mingw, msvc
+Host and target architectures:
+
+- x86_32
+- x86_64
+
+Compilers:
+
+ - clang
+ - gcc
+ - mingw
+ - msvc

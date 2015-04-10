@@ -1,4 +1,3 @@
-string(REPLACE "." "_" hpx_version_underscore ${hpx_version})
 set(hpx_project_url http://stellar.cct.lsu.edu/files)
 set(hpx_url ${hpx_project_url}/hpx_${hpx_version}.${hpx_zip_extension})
 set(hpx_prefix ${peacock_package_prefix})
