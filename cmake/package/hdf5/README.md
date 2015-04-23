@@ -19,6 +19,10 @@ Package-specific options
 | variable                       | description                                 |
 | ------------------------------ | --------------------------------------------|
 | `hdf5_version`                 | Version of HDF5 to build                    |
+| `hdf5_cpp_lib`                 | Build HDF5 C++ library                      |
+| `hdf5_deprecated_symbols`      | Enable deprecated public API symbols        |
+| `hdf5_parallel`                | Enable parallel build (requires MPI)        |
+| `hdf5_thread_safe`             | Enable thread safety                        |
 
 
 Platform-specific notes
