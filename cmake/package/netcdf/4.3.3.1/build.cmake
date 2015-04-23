@@ -1,3 +1,6 @@
+# See also:
+# - http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html#netCDF-CMake
+
 if(${host_system_name} STREQUAL "windows")
     set(netcdf_url_md5 ???)
     set(netcdf_zip_extension zip)
