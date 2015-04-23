@@ -10,15 +10,38 @@ set(hdf5_cmake_args
     ${hdf5_cmake_args}
     -DCMAKE_INSTALL_PREFIX=${hdf5_prefix}
     -DBUILD_SHARED_LIBS:BOOL=ON
-    -DHDF5_ENABLE_DEPRECATED_SYMBOLS:BOOL=OFF
-    -DHDF5_ENABLE_PARALLEL:BOOL=OFF
-    -DHDF5_ENABLE_THREADSAFE:BOOL=ON
     -DHDF5_BUILD_FORTRAN:BOOL=OFF
-    -DHDF5_BUILD_CPP_LIB:BOOL=OFF
     -DHDF5_BUILD_TOOLS:BOOL=ON
     -DHDF5_BUILD_HL_LIB:BOOL=ON
 )
 
+if(hdf5_cpp_lib)
+    set(hdf5_cmake_args
+        ${hdf5_cmake_args}
+        -DHDF5_BUILD_CPP_LIB:BOOL=ON
+    )
+endif()
+
+if(NOT hdf5_deprecated_symbols)
+    set(hdf5_cmake_args
+        ${hdf5_cmake_args}
+        -DHDF5_ENABLE_DEPRECATED_SYMBOLS:BOOL=OFF
+    )
+endif()
+
+if(hdf5_parallel)
+    set(hdf5_cmake_args
+        ${hdf5_cmake_args}
+        -DHDF5_ENABLE_PARALLEL:BOOL=ON
+    )
+endif()
+
+if(hdf5_thread_safe)
+    set(hdf5_cmake_args
+        ${hdf5_cmake_args}
+        -DHDF5_ENABLE_THREADSAFE:BOOL=ON
+    )
+endif()
 
 add_custom_target(hdf5-${hdf5_version})
 
