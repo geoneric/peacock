@@ -31,9 +31,36 @@ endif()
 if(${gdal_build_python_package})
     find_package(PythonInterp REQUIRED)
     set(gdal_configure_options ${gdal_configure_options}
-        --with-python=${PYTHON_EXECUTABLE}
-    )
+        --with-python=${PYTHON_EXECUTABLE})
 endif()
+
+
+if(${gdal_with_hdf5})
+    if(build_hdf5)
+        set(gdal_dependencies ${gdal_dependencies} hdf5-${hdf5_version})
+        set(gdal_configure_options ${gdal_configure_options}
+            --with-hdf5=${hdf5_prefix})
+    else()
+        find_package(HDF5 REQUIRED
+            COMPONENTS C)
+        set(gdal_configure_options ${gdal_configure_options}
+            --with-hdf5=${HDF5_INCLUDE_DIRS}/..})
+    endif()
+endif()
+
+
+if(${gdal_with_netcdf})
+    if(build_netcdf)
+        set(gdal_dependencies ${gdal_dependencies} netcdf-${netcdf_version})
+        set(gdal_configure_options ${gdal_configure_options}
+            --with-netcdf=${netcdf_prefix})
+    else()
+        find_package(NetCDF REQUIRED)
+        set(gdal_configure_options ${gdal_configure_options}
+            --with-netcdf=${NetCDF_INCLUDE_DIRS}/..})
+    endif()
+endif()
+
 
 
 # On certain platforms, we need to edit some files before starting the build.
@@ -99,6 +126,7 @@ function(add_external_project)
     set(target gdal-${gdal_version}-${build_type})
 
     ExternalProject_Add(${target}
+        DEPENDS ${gdal_dependencies}
         LIST_SEPARATOR !
         DOWNLOAD_DIR ${peacock_download_dir}
         URL ${gdal_url}
