@@ -32,13 +32,33 @@ endif()
 
 
 if(build_hdf5)
-    set(netcdf_dependencies hdf5-${hdf5_version})
+    set(netcdf_dependencies ${netcdf_dependencies} hdf5-${hdf5_version})
+
+    # TODO Somehow point NetCDF to our HDF5 libraries. This is done
+    #      explicitly below, to get things working. NetCDF should find
+    #      our HDF5 libraries itself though.
+    # Although NetCDF finds our HDF5, it fails with this error:
+    # Its seems HDF5_C_LIBRARY is not set.
+    #
+    # CMake Error at CMakeLists.txt:464 (CHECK_LIBRARY_EXISTS):
+    #   CHECK_LIBRARY_EXISTS Macro invoked with incorrect arguments for macro
+    #   named: CHECK_LIBRARY_EXISTS
 
     # Point CMake to our hdf5 install.
-    set(ENV{HDF5_ROOT} ${hdf5_prefix})
-    find_package(HDF5 REQUIRED COMPONENTS C HL)
+    # set(ENV{HDF5_ROOT} ${hdf5_prefix})
 
     # Pass the location of our hdf5 to the netcdf configuration.
+    set(netcdf_cmake_args
+        ${netcdf_cmake_args}
+        # -DHDF5_DIR:PATH=${hdf5_prefix}/share/cmake/hdf5
+        # -DCMAKE_PREFIX_PATH=${hdf5_prefix}
+
+        -DHDF5_INCLUDE_DIR:PATH=${hdf5_prefix}/include
+        -DHDF5_HL_LIB:PATH=${hdf5_prefix}/lib/libhdf5_hl.so
+        -DHDF5_LIB:PATH=${hdf5_prefix}/lib/libhdf5.so
+    )
+else()
+    find_package(HDF5 REQUIRED COMPONENTS C HL)
     set(netcdf_cmake_args
         ${netcdf_cmake_args}
         -DHDF5_INCLUDE_DIR:PATH=${HDF5_INCLUDE_DIRS}
