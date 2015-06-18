@@ -29,6 +29,7 @@ Package-specific options
 | `boost_build_boost_chrono`          | Build Chrono library                   |
 | `boost_build_boost_date_time`       | Build DateTime library                 |
 | `boost_build_boost_filesystem`      | Build Filesystem library               |
+| `boost_build_boost_log`             | Build Log library                      |
 | `boost_build_boost_program_options` | Build ProgramOptions library           |
 | `boost_build_boost_python`          | Build Python library                   |
 | `boost_build_boost_regex`           | Build Regex library                    |
