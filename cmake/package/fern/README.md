@@ -17,8 +17,10 @@ Other platforms may work but have not been tested.
 Package-specific options
 ------------------------
 
-| variable                       | description                                 |
-| ------------------------------ | --------------------------------------------|
-| `fern_git_repository`          | Repository of Fern sources                  |
-| `fern_git_tag`                 | Commit to check out                         |
-| `fern_build_fern_algorithm`    | Build algorithm library                     |
+| variable                        | description                                |
+| ------------------------------- | -------------------------------------------|
+| `fern_git_repository`           | Repository of Fern sources                 |
+| `fern_git_tag`                  | Commit to check out                        |
+| `fern_build_fern_algorithm`     | Build algorithm library                    |
+| `fern_build_fern_documentation` | Build documentation                        |
+| `fern_build_fern_test`          | Build test                                 |

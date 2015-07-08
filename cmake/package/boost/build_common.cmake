@@ -46,6 +46,12 @@ else()
         endif()
     elseif((${compiler_id} STREQUAL "clang"))
         set(boost_toolset clang)
+
+        if(DEFINED ENV{CXX})
+            get_filename_component(cxx $ENV{CXX} ABSOLUTE)
+
+            set(user_config "using clang : : ${cxx} !")
+        endif()
     endif()
 endif()
 
@@ -133,6 +139,9 @@ endif()
 if(${boost_build_boost_filesystem})
     set(b2_options ${b2_options} --with-filesystem)
 endif()
+if(${boost_build_boost_log})
+    set(b2_options ${b2_options} --with-log)
+endif()
 if(${boost_build_boost_program_options})
     set(b2_options ${b2_options} --with-program_options)
 endif()
@@ -160,8 +169,19 @@ endif()
 
 
 if(user_config)
-    set(boost_update_command echo ${user_config} > ${user_config_jam_filename})
+    set(boost_patch_command
+        COMMAND echo ${user_config} > ${user_config_jam_filename}
+    )
 endif()
+
+# if(DEFINED ENV{CC})
+#     # When building bjam, we need to hack to get it to build with the
+#     # configured compiler. Still it doesn't work yet. Tested on Linux with
+#     # clang-3.5, but without the clang command.
+#     set(boost_patch_command ${boost_patch_command}
+#         COMMAND sed -i.tmp "s!\${BOOST_JAM_CC}!$ENV{CC}!g" tools/build/src/engine/build.sh
+#     )
+# endif()
 
 
 set(boost_build_command ./b2 ${b2_options} stage)
@@ -174,7 +194,7 @@ ExternalProject_Add(boost-${boost_version}
     URL ${boost_url}
     URL_MD5 ${boost_url_md5}
     BUILD_IN_SOURCE 1
-    UPDATE_COMMAND ${boost_update_command}
+    PATCH_COMMAND ${boost_patch_command}
     CONFIGURE_COMMAND ${boost_configure_command}
     BUILD_COMMAND ${boost_build_command}
     INSTALL_COMMAND ${boost_install_command}

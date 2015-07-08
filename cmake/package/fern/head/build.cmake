@@ -11,7 +11,17 @@ endif()
 
 if(fern_build_fern_algorithm)
     set(fern_cmake_args ${fern_cmake_args}
-        -DFERN_ALGORITHM:BOOL=TRUE)
+        -DFERN_BUILD_ALGORITHM:BOOL=TRUE)
+endif()
+
+if(fern_build_fern_documentation)
+    set(fern_cmake_args ${fern_cmake_args}
+        -DFERN_BUILD_DOCUMENTATION:BOOL=TRUE)
+endif()
+
+if(fern_build_fern_test)
+    set(fern_cmake_args ${fern_cmake_args}
+        -DFERN_BUILD_TEST:BOOL=TRUE)
 endif()
 
 if(build_boost)
@@ -19,13 +29,6 @@ if(build_boost)
         -DBOOST_ROOT:PATH=${boost_prefix})
     set(fern_dependencies boost-${boost_version})
 endif()
-
-
-set(fern_patch_command
-    COMMAND sed -i.tmp
-        "s|ADD_SUBDIRECTORY(document)|# ADD_SUBDIRECTORY(document)|"
-            CMakeLists.txt
-)
 
 
 add_custom_target(fern-${fern_version})

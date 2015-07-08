@@ -26,4 +26,4 @@ Platform-specific notes
 -----------------------
 **Linux**
 
-Use the package manager to install `hwloc-dev` and `libgoogle-perftools-dev`.
+Use the package manager to install `libhwloc-dev` and `libgoogle-perftools-dev`.
