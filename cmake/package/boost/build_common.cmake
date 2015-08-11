@@ -51,7 +51,21 @@ else()
             get_filename_component(cxx $ENV{CXX} ABSOLUTE)
 
             set(user_config "using clang : : ${cxx} !")
+
+            # When building bjam, we need to hack to get it to build
+            # with the configured compiler.
+            # The bjam build scripts use 'clang' as the compiler instead of
+            # $CC.
+            list(APPEND boost_patch_command
+                COMMAND sed -i.tmp "s!clang -W!$ENV{CC} -W!"
+                    tools/build/src/engine/build.sh
+                COMMAND sed -i.tmp "s!clang clang!clang $ENV{CC}!"
+                    tools/build/src/engine/build.jam
+            )
         endif()
+
+        # http://stackoverflow.com/questions/12695625/boost-test-crashes-on-exit-with-clang-4-1-llvm-3-1svn
+        set(boost_cxx_flags "-std=c++11 -stdlib=libc++")
     endif()
 endif()
 
@@ -108,6 +122,8 @@ else()
         -d0)
 endif()
 
+
+
 set(b2_options
     ${b2_options}
     -q  # When an error occurs, stop ASAP.
@@ -115,6 +131,7 @@ set(b2_options
     --prefix=${boost_prefix}
     --layout=tagged
     toolset=${boost_toolset}
+    # cxxflags=${boost_cxx_flags}
     variant=${boost_variant}
     address-model=${boost_address_model}
     link=shared
@@ -122,11 +139,18 @@ set(b2_options
     ${boost_platform_specific_options}
 )
 
+if(DEFINED boost_cxx_flags)
+    set(b2_options
+        ${b2_options}
+        cxxflags=${boost_cxx_flags}
+    )
+endif()
+
 # Only pass --with-<library> or --without-<library> options to b2!
 # ./b2 --show-libraries
 # Not handled yet:
 # container context coroutine exception graph graph_parallel iostreams
-# locale log math mpi random signals wave
+# locale mpi random signals wave
 if(${boost_build_boost_atomic})
     set(b2_options ${b2_options} --with-atomic)
 endif()
@@ -141,6 +165,9 @@ if(${boost_build_boost_filesystem})
 endif()
 if(${boost_build_boost_log})
     set(b2_options ${b2_options} --with-log)
+endif()
+if(${boost_build_boost_math})
+    set(b2_options ${b2_options} --with-math)
 endif()
 if(${boost_build_boost_program_options})
     set(b2_options ${b2_options} --with-program_options)
@@ -169,19 +196,11 @@ endif()
 
 
 if(user_config)
-    set(boost_patch_command
+    list(APPEND boost_patch_command
         COMMAND echo ${user_config} > ${user_config_jam_filename}
     )
 endif()
 
-# if(DEFINED ENV{CC})
-#     # When building bjam, we need to hack to get it to build with the
-#     # configured compiler. Still it doesn't work yet. Tested on Linux with
-#     # clang-3.5, but without the clang command.
-#     set(boost_patch_command ${boost_patch_command}
-#         COMMAND sed -i.tmp "s!\${BOOST_JAM_CC}!$ENV{CC}!g" tools/build/src/engine/build.sh
-#     )
-# endif()
 
 
 set(boost_build_command ./b2 ${b2_options} stage)
