@@ -102,6 +102,13 @@ if(${host_system_name} STREQUAL "windows")
 endif()
 
 
+if(UNIX)
+    set(qt_build_command
+        make -j ${peacock_processor_count}
+    )
+endif()
+
+
 ExternalProject_Add(qt-${qt_version}
     LIST_SEPARATOR !
     DOWNLOAD_DIR ${peacock_download_dir}
