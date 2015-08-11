@@ -150,7 +150,7 @@ endif()
 # ./b2 --show-libraries
 # Not handled yet:
 # container context coroutine exception graph graph_parallel iostreams
-# locale log math mpi random signals wave
+# locale mpi random signals wave
 if(${boost_build_boost_atomic})
     set(b2_options ${b2_options} --with-atomic)
 endif()
@@ -165,6 +165,9 @@ if(${boost_build_boost_filesystem})
 endif()
 if(${boost_build_boost_log})
     set(b2_options ${b2_options} --with-log)
+endif()
+if(${boost_build_boost_math})
+    set(b2_options ${b2_options} --with-math)
 endif()
 if(${boost_build_boost_program_options})
     set(b2_options ${b2_options} --with-program_options)

@@ -8,6 +8,8 @@ if(build_boost)
     set(boost_build_boost_date_time FALSE CACHE BOOL "Build DateTime library")
     set(boost_build_boost_filesystem FALSE CACHE BOOL
         "Build Filesystem library")
+    set(boost_build_boost_log FALSE CACHE BOOL "Build Log library")
+    set(boost_build_boost_math FALSE CACHE BOOL "Build Math library")
     set(boost_build_boost_program_options FALSE CACHE BOOL
         "Build Program Options library")
     set(boost_build_boost_python FALSE CACHE BOOL "Build Python library")
@@ -26,6 +28,8 @@ if(build_boost)
         "chrono: ${boost_build_boost_chrono}"
         "date_time: ${boost_build_boost_date_time}"
         "filesystem: ${boost_build_boost_filesystem}"
+        "log: ${boost_build_boost_log}"
+        "math: ${boost_build_boost_math}"
         "program_options: ${boost_build_boost_program_options}"
         "python: ${boost_build_boost_python}"
         "regex: ${boost_build_boost_regex}"
