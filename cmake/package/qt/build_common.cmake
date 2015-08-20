@@ -102,13 +102,6 @@ if(${host_system_name} STREQUAL "windows")
 endif()
 
 
-if(UNIX)
-    set(qt_build_command
-        make -j ${peacock_processor_count}
-    )
-endif()
-
-
 ExternalProject_Add(qt-${qt_version}
     LIST_SEPARATOR !
     DOWNLOAD_DIR ${peacock_download_dir}
@@ -116,6 +109,5 @@ ExternalProject_Add(qt-${qt_version}
     URL_MD5 ${qt_url_md5}
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND ${qt_configure_command}
-    BUILD_COMMAND ${qt_build_command}
     INSTALL_COMMAND ${qt_install_command}
 )

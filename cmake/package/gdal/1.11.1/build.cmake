@@ -90,7 +90,6 @@ endif()
 
 
 set(gdal_configure_command ./configure ${gdal_configure_options})
-set(gdal_build_command make -j ${peacock_processor_count})
 
 
 # ExternalProject_Add(gdal-${gdal_version}
@@ -135,7 +134,6 @@ function(add_external_project)
         BUILD_IN_SOURCE 1
         PATCH_COMMAND ${gdal_patch_command}
         CONFIGURE_COMMAND ${gdal_configure_command}
-        BUILD_COMMAND ${gdal_build_command}
     )
 
     add_dependencies(gdal-${gdal_version} ${target})
