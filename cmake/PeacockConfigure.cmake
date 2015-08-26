@@ -28,6 +28,7 @@ set(filenames
     netcdf  # Depends on hdf5.
     gdal    # Depends on hdf5, netcdf.
     fern    # Depends on boost, hdf5, hpx, netcdf, gdal.
+    pcraster  # Depends on boost, gdal, qt, qwt, pcraster_raster_format
 )
 
 
