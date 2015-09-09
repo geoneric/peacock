@@ -39,8 +39,41 @@ if(build_pcraster_raster_format)
 endif()
 
 
-# TODO For now, we always use the system's Qt/Qwt.
-#      Support using our built Qt/Qwt.
+if(build_qt)
+    set(pcraster_cmake_args ${pcraster_cmake_args}
+        -DGDAL_ROOT:PATH=${gdal_prefix})
+    set(pcraster_dependencies ${pcraster_dependencies} gdal-${gdal_version})
+endif()
+
+
+if(build_qt)
+    # If we are building Qt also, then make sure PCRaster is built after Qt
+    # has finished building. Otherwise, it may pick up another Qt
+    # installation.
+    set(pcraster_dependencies qt-${qt_version})
+
+    # Building Qt. Set variable to the qmake that will be there once Qt is
+    # built (it may be busy building right now and not finished installing
+    # qmake). Dependency settings make sure PCRaster does not start building
+    # before Qt has finished installing.
+    set(pcraster_cmake_args ${pcraster_cmake_args}
+        -DQT_QMAKE_EXECUTABLE:PATH=${qt_prefix}/bin/qmake)
+endif()
+
+
+if(build_qwt)
+    # FindQwt script uses QT_INCLUDE_DIR as a hint for finding Qwt's
+    # files.
+    if(build_qt)
+        set(pcraster_cmake_args ${pcraster_cmake_args}
+            -DQT_INCLUDE_DIR:PATH=${qt_prefix}/include)
+    else()
+        set(pcraster_cmake_args ${pcraster_cmake_args}
+            -DQT_INCLUDE_DIR:PATH=${qwt_prefix}/include)
+    endif()
+    set(pcraster_dependencies ${pcraster_dependencies} qwt-${qwt_version})
+endif()
+
 
 add_custom_target(pcraster-${pcraster_version})
 
