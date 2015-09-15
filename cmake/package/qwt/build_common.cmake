@@ -27,23 +27,16 @@ set(qwt_patch_command
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package/qt/qt_make_spec.cmake)
 
-if(build_qt)
-    # If we are building Qt also, then make sure this Qwt is built after Qt
-    # has finished building. Otherwise, it may pick up another Qt
-    # installation.
-    set(qwt_dependencies qt-${qt_version})
 
-    # Building Qt. Set variable to the qmake that will be there once Qt is
-    # built (it may be busy building right now and not finished installing
-    # qmake). Dependency settings make sure Qwt doest not start building
-    # before Qt has finished installing.
-    set(qwt_qmake ${peacock_package_prefix}/bin/qmake)
-else()
-    # Not building Qt. We provide a hint to the directory where Qt's qmake
-    # would be installed if we were building Qt. This is handy if Qt is build
-    # in a previous run, and we want to pick it up.
-    find_program(qwt_qmake qmake HINTS ${peacock_package_prefix}/bin)
+if(build_qt)
+    set(qwt_dependencies qt-${qt_version})
+    set(qwt_cmake_find_root_path ${qwt_cmake_find_root_path}
+        ${qt_prefix})
 endif()
+
+
+set(qwt_cmake_args ${qwt_cmake_args}
+    -DCMAKE_FIND_ROOT_PATH=${qwt_cmake_find_root_path})
 
 
 set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} qwt.pro)
@@ -56,6 +49,7 @@ ExternalProject_Add(qwt-${qwt_version}
     URL ${qwt_url}
     URL_MD5 ${qwt_url_md5}
     BUILD_IN_SOURCE 1
+    CMAKE_ARGS ${qwt_cmake_args}  # -DCMAKE_BUILD_TYPE=${build_type}
     PATCH_COMMAND ${qwt_patch_command}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ${qwt_build_command}

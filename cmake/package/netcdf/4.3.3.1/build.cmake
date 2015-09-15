@@ -40,6 +40,8 @@ if(build_hdf5)
     # Although NetCDF finds our HDF5, it fails with this error:
     # Its seems HDF5_C_LIBRARY is not set.
     #
+    # TODO Update: see how qwt finds qt. Use CMAKE_FIND_ROOT_PATH.
+    #
     # CMake Error at CMakeLists.txt:464 (CHECK_LIBRARY_EXISTS):
     #   CHECK_LIBRARY_EXISTS Macro invoked with incorrect arguments for macro
     #   named: CHECK_LIBRARY_EXISTS

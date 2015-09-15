@@ -20,63 +20,42 @@ if(pcraster_build_pcraster_test)
 endif()
 
 if(build_boost)
-    set(pcraster_cmake_args ${pcraster_cmake_args}
-        -DBOOST_ROOT:PATH=${boost_prefix})
     set(pcraster_dependencies ${pcraster_dependencies} boost-${boost_version})
+    set(pcraster_cmake_find_root_path ${pcraster_cmake_find_root_path}
+        ${boost_prefix})
 endif()
 
 if(build_gdal)
-    set(pcraster_cmake_args ${pcraster_cmake_args}
-        -DGDAL_ROOT:PATH=${gdal_prefix})
     set(pcraster_dependencies ${pcraster_dependencies} gdal-${gdal_version})
+    set(pcraster_cmake_find_root_path ${pcraster_cmake_find_root_path}
+        ${gdal_prefix})
 endif()
 
 if(build_pcraster_raster_format)
-    set(pcraster_cmake_args ${pcraster_cmake_args}
-        -DPCRASTER_RASTER_FORMAT_ROOT:PATH=${pcraster_raster_format_prefix})
     set(pcraster_dependencies ${pcraster_dependencies}
         pcraster_raster_format-${pcraster_raster_format_version})
+    set(pcraster_cmake_find_root_path ${pcraster_cmake_find_root_path}
+        ${pcraster_raster_format_prefix})
 endif()
 
 
 if(build_qt)
-    set(pcraster_cmake_args ${pcraster_cmake_args}
-        -DGDAL_ROOT:PATH=${gdal_prefix})
-    set(pcraster_dependencies ${pcraster_dependencies} gdal-${gdal_version})
-endif()
-
-
-if(build_qt)
-    # If we are building Qt also, then make sure PCRaster is built after Qt
-    # has finished building. Otherwise, it may pick up another Qt
-    # installation.
     set(pcraster_dependencies qt-${qt_version})
-
-    # Building Qt. Set variable to the qmake that will be there once Qt is
-    # built (it may be busy building right now and not finished installing
-    # qmake). Dependency settings make sure PCRaster does not start building
-    # before Qt has finished installing.
-    set(pcraster_cmake_args ${pcraster_cmake_args}
-        -DQT_QMAKE_EXECUTABLE:PATH=${qt_prefix}/bin/qmake)
+    set(pcraster_cmake_find_root_path ${pcraster_cmake_find_root_path}
+        ${qt_prefix})
 endif()
 
 
 if(build_qwt)
-    # FindQwt script uses QT_INCLUDE_DIR as a hint for finding Qwt's
-    # files.
-    if(build_qt)
-        set(pcraster_cmake_args ${pcraster_cmake_args}
-            -DQT_INCLUDE_DIR:PATH=${qt_prefix}/include)
-    else()
-        set(pcraster_cmake_args ${pcraster_cmake_args}
-            -DQT_INCLUDE_DIR:PATH=${qwt_prefix}/include)
-    endif()
     set(pcraster_dependencies ${pcraster_dependencies} qwt-${qwt_version})
+    set(pcraster_cmake_find_root_path ${pcraster_cmake_find_root_path}
+        ${qwt_prefix})
 endif()
 
+set(pcraster_cmake_args ${pcraster_cmake_args}
+    -DCMAKE_FIND_ROOT_PATH=${pcraster_cmake_find_root_path})
 
 add_custom_target(pcraster-${pcraster_version})
-
 
 function(add_external_project)
     set(options "")

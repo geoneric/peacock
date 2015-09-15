@@ -16,16 +16,17 @@ if(hpx_build_examples)
         -DHPX_BUILD_EXAMPLES:BOOL=ON)
 endif()
 
-if(build_boost)
-    # Make sure our boost is built before hpx is built. Otherwise hpx might
-    # pick up another boost build.
-    set(hpx_dependencies boost-${boost_version})
 
-    set(hpx_cmake_args
-        ${hpx_cmake_args}
-        -DBOOST_ROOT:PATH=${boost_prefix}
-    )
+if(build_boost)
+    set(hpx_dependencies ${hpx_dependencies} boost-${boost_version})
+    set(hpx_cmake_find_root_path ${hpx_cmake_find_root_path}
+        ${boost_prefix})
 endif()
+
+
+set(hpx_cmake_args ${hpx_cmake_args}
+    -DCMAKE_FIND_ROOT_PATH=${hpx_cmake_find_root_path})
+
 
 ExternalProject_Add(hpx-${hpx_version}
     DEPENDS ${hpx_dependencies}
