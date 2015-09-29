@@ -10,6 +10,16 @@ set(hpx_cmake_args
     -DCMAKE_INSTALL_PREFIX=${hpx_prefix}
 )
 
+
+set(hpx_parcelport_mpi TRUE)
+if(hpx_parcelport_mpi)
+    set(hpx_cmake_args
+        ${hpx_cmake_args}
+        -DHPX_PARCELPORT_MPI:BOOL=ON
+    )
+endif()
+
+
 if(hpx_build_examples)
     set(hpx_cmake_args
         ${hpx_cmake_args}
@@ -24,8 +34,18 @@ if(build_boost)
 endif()
 
 
-set(hpx_cmake_args ${hpx_cmake_args}
-    -DCMAKE_FIND_ROOT_PATH=${hpx_cmake_find_root_path})
+set(hpx_no_boost_cmake TRUE)
+if(build_boost OR hpx_no_boost_cmake)
+    set(hpx_cmake_args
+        ${hpx_cmake_args}
+        -DBoost_NO_BOOST_CMAKE:BOOL=TRUE)
+endif()
+
+
+if(hpx_cmake_find_root_path)
+    set(hpx_cmake_args ${hpx_cmake_args}
+        -DCMAKE_FIND_ROOT_PATH=${hpx_cmake_find_root_path})
+endif()
 
 
 ExternalProject_Add(hpx-${hpx_version}
