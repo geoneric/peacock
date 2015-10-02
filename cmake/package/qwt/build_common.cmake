@@ -32,6 +32,17 @@ if(build_qt)
     set(qwt_dependencies qt-${qt_version})
     set(qwt_cmake_find_root_path ${qwt_cmake_find_root_path}
         ${qt_prefix})
+
+    # Building Qt. Set variable to the qmake that will be there once Qt is
+    # built (it may be busy building right now and not finished installing
+    # qmake). Dependency settings make sure Qwt doest not start building
+    # before Qt has finished installing.
+    set(qwt_qmake ${qt_prefix}/bin/qmake)
+else()
+    # Not building Qt. We provide a hint to the directory where Qt's qmake
+    # would be installed if we were building Qt. This is handy if Qt is build
+    # in a previous run, and we want to pick it up.
+    find_program(qwt_qmake qmake HINTS ${qt_prefix}/bin)
 endif()
 
 
