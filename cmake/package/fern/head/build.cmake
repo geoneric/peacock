@@ -30,8 +30,10 @@ if(build_boost)
         ${boost_prefix})
 endif()
 
-set(fern_cmake_args ${fern_cmake_args}
-    -DCMAKE_FIND_ROOT_PATH=${fern_cmake_find_root_path})
+if(fern_cmake_find_root_path)
+    set(fern_cmake_args ${fern_cmake_args}
+        -DCMAKE_FIND_ROOT_PATH=${fern_cmake_find_root_path})
+endif()
 
 add_custom_target(fern-${fern_version})
 
