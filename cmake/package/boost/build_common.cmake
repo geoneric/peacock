@@ -15,7 +15,8 @@ if(${target_system_name} STREQUAL "darwin")
         set(user_config "using darwin : : ${cxx} !")
     endif()
 else()
-    if((${compiler_id} STREQUAL "gcc") OR (${compiler_id} STREQUAL "mingw"))
+    if((${peacock_compiler_id} STREQUAL "gcc") OR
+            (${peacock_compiler_id} STREQUAL "mingw"))
         set(boost_toolset gcc)
 
         if(DEFINED ENV{CXX})
@@ -44,7 +45,7 @@ else()
                 set(user_config "using gcc : : ${cxx} !")
             endif()
         endif()
-    elseif((${compiler_id} STREQUAL "clang"))
+    elseif((${peacock_compiler_id} STREQUAL "clang"))
         set(boost_toolset clang)
 
         if(DEFINED ENV{CXX})

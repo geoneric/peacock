@@ -65,7 +65,7 @@ endif()
 
 # On certain platforms, we need to edit some files before starting the build.
 if(${host_system_name} STREQUAL "windows")
-    if(${compiler_id} STREQUAL "mingw")
+    if(${peacock_compiler_id} STREQUAL "mingw")
         set(gdal_configure_options
           ${gdal_configure_options}
           --with-curl=no

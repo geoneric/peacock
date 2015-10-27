@@ -1,6 +1,6 @@
 if((${host_system_name} STREQUAL "windows") AND
         (${target_system_name} STREQUAL "windows") AND
-        (${compiler_id} STREQUAL "mingw"))
+        (${peacock_compiler_id} STREQUAL "mingw"))
 
     if(${target_architecture} STREQUAL "x86_32")
         set(ml ml)
