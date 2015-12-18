@@ -5,10 +5,10 @@ set(gdal_prefix ${peacock_package_prefix})
 
 if(${host_system_name} STREQUAL "windows")
     set(gdal_url ${gdal_download_url}/gdal${gdal_version_no_dots}.zip)
-    set(gdal_url_md5 399bd50a5ad5f00d0d045586abccbd4a)
+    set(gdal_url_md5 8ab1b1ec75e6a030f077652f1e15a350)
 else()
     set(gdal_url ${gdal_download_url}/gdal-${gdal_version}.tar.gz)
-    set(gdal_url_md5 2c5f8f12ed416febd2cbd7b63c48eb17)
+    set(gdal_url_md5 bdded121a62dae246d8500b42d87145b)
 endif()
 
 
@@ -18,12 +18,6 @@ set(gdal_configure_options
     --without-libtool
     --host=${peacock_gnu_configure_host}
 )
-
-if(${gdal_build_ogr})
-    set(gdal_configure_options ${gdal_configure_options} --with-ogr)
-else()
-    set(gdal_configure_options ${gdal_configure_options} --without-ogr)
-endif()
 
 
 # Set Python_ADDITIONAL_VERSIONS to a list of version numbers that should
