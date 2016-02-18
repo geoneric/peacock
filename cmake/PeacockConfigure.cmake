@@ -19,6 +19,7 @@ file(GLOB filenames RELATIVE ${peacock_package_dir} ${peacock_package_dir}/*)
 #      Somehow we should figure out the order in which package build scripts
 #      should be loaded.
 set(filenames
+    docopt
     pcraster_raster_format
     boost
     hdf5

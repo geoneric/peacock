@@ -1,6 +1,7 @@
 Package
 =======
 - [Boost](boost/README.md)
+- [Docopt](docopt/README.md)
 - [Fern](fern/README.md)
 - [GDAL](gdal/README.md)
 - [HDF5](hdf5/README.md)
