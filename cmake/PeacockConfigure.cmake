@@ -22,6 +22,7 @@ set(filenames
     docopt
     pcraster_raster_format
     boost
+    pybind11
     hdf5
     hpx     # Depends on boost, hdf5.
     qt
