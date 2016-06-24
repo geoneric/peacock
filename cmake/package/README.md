@@ -9,5 +9,6 @@ Package
 - [NetCDF](netcdf/README.md)
 - [PCRaster](pcraster/README.md)
 - [PCRaster raster format](pcraster_raster_format/README.md)
+- [pybind11](pybind11/README.md)
 - [Qt](qt/README.md)
 - [Qwt](qwt/README.md)
