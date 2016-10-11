@@ -39,10 +39,15 @@ if(build_qt)
     # before Qt has finished installing.
     set(qwt_qmake ${qt_prefix}/bin/qmake)
 else()
-    # Not building Qt. We provide a hint to the directory where Qt's qmake
-    # would be installed if we were building Qt. This is handy if Qt is build
-    # in a previous run, and we want to pick it up.
-    find_program(qwt_qmake qmake HINTS ${qt_prefix}/bin)
+    # Not building Qt. We first provide a hint to the directory where
+    # Qt's qmake would be installed if we were building Qt. This is
+    # handy if Qt is build in a previous run, and we want to pick it up.
+    find_program(qwt_qmake qmake
+        HINTS
+            ${qt_prefix}/bin
+            /usr/lib64/qt5/bin
+            /usr/lib64/qt4/bin
+    )
 endif()
 
 
