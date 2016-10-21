@@ -55,12 +55,16 @@ set(qwt_cmake_args ${qwt_cmake_args}
     -DCMAKE_FIND_ROOT_PATH=${qwt_cmake_find_root_path})
 
 
-if(DEFINED ENV{CC})
-    set(qwt_qmake_args ${qwt_qmake_args} QMAKE_CC=ENV{CC})
-endif()
-
+# If the caller overrides the default compiler, pass this information to
+# QMake. This information is also passed in CMAKE_ARGS, but this doesn't
+# seem to get propagated to QMake.
+# TODO This ties in with the qmakespec. Somehow it should pickup this info.
 if(DEFINED ENV{CXX})
-    set(qwt_qmake_args ${qwt_qmake_args} QMAKE_CXX=ENV{CXX})
+    set(qwt_qmake_args ${qwt_qmake_args}
+        QMAKE_CXX=$ENV{CXX}
+        QMAKE_LINK=$ENV{CXX}
+        QMAKE_LINK_SHLIB=$ENV{CXX}
+    )
 endif()
 
 set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} ${qwt_qmake_args}
