@@ -55,7 +55,16 @@ set(qwt_cmake_args ${qwt_cmake_args}
     -DCMAKE_FIND_ROOT_PATH=${qwt_cmake_find_root_path})
 
 
-set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} qwt.pro)
+if(DEFINED ENV{CC})
+    set(qwt_qmake_args ${qwt_qmake_args} QMAKE_CC=ENV{CC})
+endif()
+
+if(DEFINED ENV{CXX})
+    set(qwt_qmake_args ${qwt_qmake_args} QMAKE_CXX=ENV{CXX})
+endif()
+
+set(qwt_build_command ${qwt_qmake} -spec ${qt_make_spec} ${qwt_qmake_args}
+    qwt.pro)
 
 
 ExternalProject_Add(qwt-${qwt_version}
