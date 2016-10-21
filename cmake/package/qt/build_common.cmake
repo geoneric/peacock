@@ -108,6 +108,7 @@ ExternalProject_Add(qt-${qt_version}
     URL ${qt_url}
     URL_MD5 ${qt_url_md5}
     BUILD_IN_SOURCE 1
+    CMAKE_ARGS ${qt_cmake_args}
     CONFIGURE_COMMAND ${qt_configure_command}
     INSTALL_COMMAND ${qt_install_command}
 )

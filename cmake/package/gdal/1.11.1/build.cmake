@@ -132,6 +132,7 @@ function(add_external_project)
         URL ${gdal_url}
         URL_MD5 ${gdal_url_md5}
         BUILD_IN_SOURCE 1
+        CMAKE_ARGS ${gdal_cmake_args}
         PATCH_COMMAND ${gdal_patch_command}
         CONFIGURE_COMMAND ${gdal_configure_command}
     )

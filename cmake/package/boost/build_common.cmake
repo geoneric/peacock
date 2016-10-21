@@ -214,6 +214,7 @@ ExternalProject_Add(boost-${boost_version}
     URL ${boost_url}
     URL_MD5 ${boost_url_md5}
     BUILD_IN_SOURCE 1
+    CMAKE_ARGS ${boost_cmake_args}
     PATCH_COMMAND ${boost_patch_command}
     CONFIGURE_COMMAND ${boost_configure_command}
     BUILD_COMMAND ${boost_build_command}
