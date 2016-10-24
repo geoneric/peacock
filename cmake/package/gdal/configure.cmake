@@ -20,11 +20,13 @@ if(build_gdal)
 
     if(gdal_version VERSION_LESS "2")
         set(gdal_settings
+            ${gdal_settings}
             "ogr: ${gdal_build_ogr}"
         )
     endif()
 
     set(gdal_settings
+        ${gdal_settings}
         "python: ${gdal_build_python_package}"
         "hdf5: ${gdal_with_hdf5}"
         "netcdf: ${gdal_with_netcdf}"
