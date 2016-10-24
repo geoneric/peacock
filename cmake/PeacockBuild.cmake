@@ -11,11 +11,11 @@ message(STATUS "peacock: packages to build: ${peacock_packages_to_build}")
 # In case the caller overrides default compilers, we must make sure that
 # this information is passed to the project.
 if(DEFINED ENV{CC})
-    set(cmake_args ${cmake_args} -DCC=ENV{CC})
+    set(cmake_args ${cmake_args} -DCC=$ENV{CC})
 endif()
 
 if(DEFINED ENV{CXX})
-    set(cmake_args ${cmake_args} -DCXX=ENV{CXX})
+    set(cmake_args ${cmake_args} -DCXX=$ENV{CXX})
 endif()
 
 
