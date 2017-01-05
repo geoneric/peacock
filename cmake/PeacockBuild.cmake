@@ -22,5 +22,10 @@ endif()
 foreach(package_name ${peacock_packages_to_build})
     set(${package_name}_cmake_args ${cmake_args})
     set(filename ${peacock_package_dir}/${package_name}/${${package_name}_version}/build.cmake)
+
+    if(NOT EXISTS ${filename})
+        set(filename ${peacock_package_dir}/${package_name}/build.cmake)
+    endif()
+
     include(${filename})
 endforeach()

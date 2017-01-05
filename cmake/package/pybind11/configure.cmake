@@ -1,5 +1,5 @@
 set(build_pybind11 FALSE CACHE BOOL "Build pybind11")
-set(pybind11_version "1.8.0")
+set(pybind11_version "2.0.1")
 
 if(build_pybind11)
     set(pybind11_version ${pybind11_version} CACHE STRING
@@ -9,7 +9,3 @@ if(build_pybind11)
         "version: ${pybind11_version}"
     )
 endif()
-
-set(filename
-    ${peacock_package_dir}/pybind11/${pybind11_version}/configure.cmake)
-include(${filename})

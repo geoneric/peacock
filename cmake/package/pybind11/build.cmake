@@ -1,3 +1,5 @@
+set(pybind11_git_tag "v${pybind11_version}")
+
 set(pybind11_git_repository
     https://github.com/pybind/pybind11)
 
