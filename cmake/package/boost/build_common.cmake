@@ -12,7 +12,7 @@ if(${target_system_name} STREQUAL "darwin")
     if(DEFINED ENV{CXX})
         get_filename_component(cxx $ENV{CXX} ABSOLUTE)
 
-        set(user_config "using darwin : : ${cxx} !")
+        list(APPEND user_config "using darwin : : ${cxx}")
     endif()
 else()
     if((${peacock_compiler_id} STREQUAL "gcc") OR
@@ -34,15 +34,14 @@ else()
                     set(resource_compiler ${base}windres)
                 endif()
 
-                set(user_config
+                list(APPEND user_config
                     "using gcc : : ${cxx} "
                     ": "
                     "<rc>${resource_compiler} "
                     "<archiver>${base}gcc-ar "
-                    "<ranlib>${base}gcc-ranlib "
-                    "!")
+                    "<ranlib>${base}gcc-ranlib")
             else()
-                set(user_config "using gcc : : ${cxx} !")
+                list(APPEND user_config "using gcc : : ${cxx}")
             endif()
         endif()
     elseif((${peacock_compiler_id} STREQUAL "clang"))
@@ -51,7 +50,7 @@ else()
         if(DEFINED ENV{CXX})
             get_filename_component(cxx $ENV{CXX} ABSOLUTE)
 
-            set(user_config "using clang : : ${cxx} !")
+            list(APPEND user_config "using clang : : ${cxx}")
 
             # When building bjam, we need to hack to get it to build
             # with the configured compiler.
@@ -73,8 +72,10 @@ endif()
 
 if(${boost_build_boost_python})
     find_package(PythonInterp REQUIRED)
-    set(bootstrap_options ${bootstrap_options}
-        --with-python=${PYTHON_EXECUTABLE})
+    find_package(PythonLibs REQUIRED)
+
+    get_filename_component(python_library_dir ${PYTHON_LIBRARIES} DIRECTORY)
+    list(APPEND user_config "using python : ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} : ${PYTHON_EXECUTABLE} : ${PYTHON_INCLUDE_DIRS} : ${python_library_dir}")
 endif()
 
 
@@ -197,11 +198,12 @@ endif()
 
 
 if(user_config)
-    list(APPEND boost_patch_command
-        COMMAND echo ${user_config} > ${user_config_jam_filename}
-    )
+    foreach(line ${user_config})
+        list(APPEND boost_patch_command
+            COMMAND echo "${line} !" >> ${user_config_jam_filename}
+        )
+    endforeach()
 endif()
-
 
 
 set(boost_build_command ./b2 ${b2_options} stage)
