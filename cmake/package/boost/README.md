@@ -41,6 +41,15 @@ Package-specific options
 | `boost_build_boost_timer`           | Build Timer library                    |
 
 
+Boost.Python
+------------
+The Python version used by Boost.Python is determined by the standard CMake modules to find Python. So, in order to use a specific version of Python, pass `Python_ADDITIONAL_VERSIONS` when calling CMake, e.g.:
+
+```bash
+cmake -DPython_ADDITIONAL_VERSIONS=3 <path_to>/peacock
+```
+
+
 Platform-specific notes
 -----------------------
 **Windows, Mingw, Cygwin Bash shell**
