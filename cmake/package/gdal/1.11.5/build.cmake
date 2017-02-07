@@ -5,10 +5,10 @@ set(gdal_prefix ${peacock_package_prefix})
 
 if(${host_system_name} STREQUAL "windows")
     set(gdal_url ${gdal_download_url}/gdal${gdal_version_no_dots}.zip)
-    set(gdal_url_md5 bc490ae81b7eb69e15d041c0e308edeb)
+    set(gdal_url_md5 9553f563f9352030819ad2c8797c17f4)
 else()
     set(gdal_url ${gdal_download_url}/gdal-${gdal_version}.tar.gz)
-    set(gdal_url_md5 7555f55855f613be49e6508eed0ac3fa)
+    set(gdal_url_md5 879fa140f093a2125f71e38502bdf714)
 endif()
 
 
