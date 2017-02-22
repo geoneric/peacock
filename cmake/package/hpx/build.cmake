@@ -23,10 +23,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
 endif()
 
 
-if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
-    # TODO
-    set(hpx_parcelport_mpi TRUE)
-endif()
+# TODO Make this a configuration variable in configure.cmake
+set(hpx_parcelport_mpi FALSE)
+# if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
+#     set(hpx_parcelport_mpi TRUE)
+# endif()
 
 
 if(hpx_parcelport_mpi)
