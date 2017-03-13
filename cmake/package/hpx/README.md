@@ -27,9 +27,9 @@ Platform-specific notes
 -----------------------
 **Linux**
 
-Use the package manager to install `libhwloc-dev` and `libgoogle-perftools-dev`.
+Use the package manager to install `libhwloc-dev`, `libjemalloc-dev` and `libgoogle-perftools-dev`.
 
 
 **macOS**
 
-Tested with compiler installed by macports. Use the package manager to install `hwloc`.
+Tested with compiler installed by macports. Use the package manager to install `hwloc`, `jemalloc` and `google-perftools`.

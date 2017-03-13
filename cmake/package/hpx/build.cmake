@@ -5,22 +5,22 @@ set(hpx_prefix ${peacock_package_prefix})
 set(hpx_cmake_args
     ${hpx_cmake_args}
     -DCMAKE_INSTALL_PREFIX=${hpx_prefix}
-)
-
-
-set(hpx_cmake_args
-    ${hpx_cmake_args}
+    -DCMAKE_BUILD_TYPE=Release
+    -DHPX_WITH_EXAMPLES:BOOL=OFF
+    -DHPX_WITH_TESTS:BOOL=OFF
+    -DHPX_WITH_MALLOC=JEMALLOC
     -DHPX_WITH_HWLOC:BOOL=ON
+    -DHPX_WITH_THREAD_IDLE_RATES=ON
 )
 
 
-if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
-    set(hpx_cmake_args
-        ${hpx_cmake_args}
-        -DHPX_WITH_HWLOC:BOOL=ON
-        -DHPX_WITH_GOOGLE_PERFTOOLS:BOOL=ON
-    )
-endif()
+### if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
+###     set(hpx_cmake_args
+###         ${hpx_cmake_args}
+###         -DHPX_WITH_HWLOC:BOOL=ON
+###         -DHPX_WITH_GOOGLE_PERFTOOLS:BOOL=ON
+###     )
+### endif()
 
 
 # TODO Make this a configuration variable in configure.cmake
@@ -35,13 +35,6 @@ if(hpx_parcelport_mpi)
         ${hpx_cmake_args}
         -DHPX_PARCELPORT_MPI:BOOL=ON
     )
-endif()
-
-
-if(hpx_build_examples)
-    set(hpx_cmake_args
-        ${hpx_cmake_args}
-        -DHPX_BUILD_EXAMPLES:BOOL=ON)
 endif()
 
 
