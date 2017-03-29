@@ -1,5 +1,5 @@
 set(build_pybind11 FALSE CACHE BOOL "Build pybind11")
-set(pybind11_version "2.0.1")
+set(pybind11_version "2.1.0")
 
 if(build_pybind11)
     set(pybind11_version ${pybind11_version} CACHE STRING
