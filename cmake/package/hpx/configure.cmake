@@ -1,5 +1,5 @@
 set(build_hpx FALSE CACHE BOOL "Build HPX")
-set(hpx_version "0.9.99")
+set(hpx_version "1.0.0")
 
 if(build_hpx)
     set(hpx_version ${hpx_version} CACHE STRING "Version of HPX to build")
