@@ -27,7 +27,17 @@ Platform-specific notes
 -----------------------
 **Linux**
 
-Use the package manager to install `libhwloc-dev`, `libjemalloc-dev` and `libgoogle-perftools-dev`.
+Use the package manager to install gperftools, hwloc and jemalloc.
+
+Debian-based distribution:
+- `libgoogle-perftools-dev`
+- `libhwloc-dev`
+- `libjemalloc-dev`
+
+Redhat-based distribution:
+- `gperftools-devel`
+- `hwloc-devel`
+- `jemalloc-devel`
 
 
 **macOS**
