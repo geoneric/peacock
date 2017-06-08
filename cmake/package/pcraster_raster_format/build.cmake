@@ -1,33 +1,41 @@
 set(pcraster_raster_format_prefix ${peacock_package_prefix})
 set(pcraster_raster_format_git_repository
-    git://git.code.sf.net/p/pcraster/rasterformat)
-set(pcraster_raster_format_git_tag v1.3.1)
+    https://github.com/pcraster/rasterformat.git)
+
+set(pcraster_raster_format_git_tag ${pcraster_raster_format_version})
+
+if(NOT pcraster_raster_format_version STREQUAL "HEAD")
+    set(pcraster_raster_format_git_tag
+        "v${pcraster_raster_format_git_tag}")
+endif()
 
 
-# Comment stuff we don't need and that will trip the build.
-set(pcraster_raster_format_patch_command
-    COMMAND sed -i.tmp "4,6s|^|# |" CMakeLists.txt
+if(${pcraster_raster_format_version} VERSION_LESS "1.3.3")
+    # Comment stuff we don't need and that will trip the build.
+    set(pcraster_raster_format_patch_command
+        COMMAND sed -i.tmp "4,6s|^|# |" CMakeLists.txt
 
-    # This should be handled by the lib itself, but it isn't yet. In future
-    # versions we not have to do this.
-    COMMAND sed -i.tmp
-        "7i \
-if(WIN32)\\n\
-    set(CMAKE_DEBUG_POSTFIX \"d\")\\n\
-endif()"
-        CMakeLists.txt
+        # This should be handled by the lib itself, but it isn't yet. In future
+        # versions we not have to do this.
+        COMMAND sed -i.tmp
+            "7i \
+    if(WIN32)\\n\
+        set(CMAKE_DEBUG_POSTFIX \"d\")\\n\
+    endif()"
+            CMakeLists.txt
 
-    # Add the -fPIC compiler option to allow this library to be included in
-    # shared libraries.
-    # This should be handled by the lib itself, but it isn't yet. In future
-    # versions we not have to do this.
-    COMMAND sed -i.tmp
-        "1i \
-if(CMAKE_C_COMPILER_ID STREQUAL \"GNU\")\\n\
-    add_compile_options(\"-fPIC\")\\n\
-endif()"
-        sources/pcraster_raster_format/CMakeLists.txt
-)
+        # Add the -fPIC compiler option to allow this library to be included in
+        # shared libraries.
+        # This should be handled by the lib itself, but it isn't yet. In future
+        # versions we not have to do this.
+        COMMAND sed -i.tmp
+            "1i \
+    if(CMAKE_C_COMPILER_ID STREQUAL \"GNU\")\\n\
+        add_compile_options(\"-fPIC\")\\n\
+    endif()"
+            sources/pcraster_raster_format/CMakeLists.txt
+    )
+endif()
 
 
 if(CMAKE_MAKE_PROGRAM)

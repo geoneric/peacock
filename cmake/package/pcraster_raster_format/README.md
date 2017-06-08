@@ -1,6 +1,7 @@
 PCRaster raster format
 ======================
-http://www.pcraster.eu
+- http://www.pcraster.eu
+- https://github.com/pcraster/rasterformat
 
 
 Supported platforms
