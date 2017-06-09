@@ -19,9 +19,9 @@ if(${pcraster_raster_format_version} VERSION_LESS "1.3.3")
         # versions we not have to do this.
         COMMAND sed -i.tmp
             "7i \
-    if(WIN32)\\n\
-        set(CMAKE_DEBUG_POSTFIX \"d\")\\n\
-    endif()"
+if(WIN32)\\n\
+    set(CMAKE_DEBUG_POSTFIX \"d\")\\n\
+endif()"
             CMakeLists.txt
 
         # Add the -fPIC compiler option to allow this library to be included in
@@ -30,9 +30,9 @@ if(${pcraster_raster_format_version} VERSION_LESS "1.3.3")
         # versions we not have to do this.
         COMMAND sed -i.tmp
             "1i \
-    if(CMAKE_C_COMPILER_ID STREQUAL \"GNU\")\\n\
-        add_compile_options(\"-fPIC\")\\n\
-    endif()"
+if(CMAKE_C_COMPILER_ID STREQUAL \"GNU\")\\n\
+    add_compile_options(\"-fPIC\")\\n\
+endif()"
             sources/pcraster_raster_format/CMakeLists.txt
     )
 endif()
