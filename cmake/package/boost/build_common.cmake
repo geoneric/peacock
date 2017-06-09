@@ -74,8 +74,12 @@ if(${boost_build_boost_python})
     find_package(PythonInterp REQUIRED)
     find_package(PythonLibs REQUIRED)
 
-    get_filename_component(python_library_dir ${PYTHON_LIBRARIES} DIRECTORY)
-    list(APPEND user_config "using python : ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} : ${PYTHON_EXECUTABLE} : ${PYTHON_INCLUDE_DIRS} : ${python_library_dir}")
+    # get_filename_component(python_library_dir ${PYTHON_LIBRARIES} DIRECTORY)
+    # list(APPEND user_config "using python : ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} : ${PYTHON_EXECUTABLE} : ${PYTHON_INCLUDE_DIRS} : ${python_library_dir}")
+
+    set(bootstrap_options
+        --with-python=${PYTHON_EXECUTABLE}
+    )
 endif()
 
 
@@ -198,6 +202,9 @@ endif()
 
 
 if(user_config)
+    # TODO The name of user_config_jam_filename can be configured. That
+    #    way we can use the same file for all boost versions and get rid
+    #    of the naming stuff from the version-specific scripts.
     foreach(line ${user_config})
         list(APPEND boost_patch_command
             COMMAND echo "${line} !" >> ${user_config_jam_filename}
