@@ -33,7 +33,7 @@ set(hpx_parcelport_mpi FALSE)
 if(hpx_parcelport_mpi)
     set(hpx_cmake_args
         ${hpx_cmake_args}
-        -DHPX_PARCELPORT_MPI:BOOL=ON
+        -DHPX_WITH_PARCELPORT_MPI:BOOL=ON
     )
 endif()
 
