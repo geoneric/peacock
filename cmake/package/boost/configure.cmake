@@ -1,5 +1,5 @@
 set(build_boost FALSE CACHE BOOL "Build Boost")
-set(boost_version "1.57.0")
+set(boost_version "1.65.0")
 
 if(build_boost)
     set(boost_version ${boost_version} CACHE STRING "Version of Boost to build")
@@ -42,5 +42,5 @@ if(build_boost)
 endif()
 
 
-set(filename ${peacock_package_dir}/boost/${boost_version}/configure.cmake)
+set(filename ${peacock_package_dir}/boost/configure_common.cmake)
 include(${filename})
