@@ -1,5 +1,5 @@
 set(build_docopt FALSE CACHE BOOL "Build Docopt")
-set(docopt_version "0.6.1")
+set(docopt_version "0.6.2")
 
 if(build_docopt)
     set(docopt_version ${docopt_version} CACHE STRING
@@ -9,7 +9,3 @@ if(build_docopt)
         "version: ${docopt_version}"
     )
 endif()
-
-set(filename
-    ${peacock_package_dir}/docopt/${docopt_version}/configure.cmake)
-include(${filename})
