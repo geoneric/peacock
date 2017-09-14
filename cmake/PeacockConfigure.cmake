@@ -25,12 +25,13 @@ set(filenames
     boost
     pybind11
     hdf5
-    hpx     # Depends on boost, hdf5.
+    hpx     # Depends on boost, hdf5
     qt
-    qwt     # Depends on qt.
-    netcdf  # Depends on hdf5.
-    gdal    # Depends on hdf5, netcdf.
-    fern    # Depends on boost, hdf5, hpx, netcdf, gdal.
+    qwt     # Depends on qt
+    netcdf  # Depends on hdf5
+    gdal    # Depends on hdf5, netcdf
+    lue     # Depends on boost, docopt, gdal, hdf5, nlohmann_json, pybind11
+    fern    # Depends on boost, hdf5, hpx, netcdf, gdal
     pcraster  # Depends on boost, gdal, qt, qwt, pcraster_raster_format
 )
 
