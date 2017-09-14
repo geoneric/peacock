@@ -6,6 +6,7 @@ Package
 - [GDAL](gdal/README.md)
 - [HDF5](hdf5/README.md)
 - [HPX](hpx/README.md)
+- [LUE](lue/README.md)
 - [NetCDF](netcdf/README.md)
 - [PCRaster](pcraster/README.md)
 - [PCRaster raster format](pcraster_raster_format/README.md)
