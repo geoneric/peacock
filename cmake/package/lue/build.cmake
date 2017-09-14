@@ -1,6 +1,7 @@
 if((${lue_version} STREQUAL "head") AND (NOT DEFINED lue_git_tag))
-    # Pick a commit that is known to work OK
-    set(lue_git_tag 746e7313a8c32d3e9142f36faea1bb40a2cb3ecd)
+    # Unless a specific tag is selected, we assume the user wants the tip of
+    # the master branch
+    set(lue_git_tag "master")
 endif()
 
 set(lue_git_repository
