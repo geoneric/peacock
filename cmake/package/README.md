@@ -4,6 +4,7 @@ Package
 - [Docopt](docopt/README.md)
 - [Fern](fern/README.md)
 - [GDAL](gdal/README.md)
+- [Google Benchmark](google_benchmark/README.md)
 - [HDF5](hdf5/README.md)
 - [HPX](hpx/README.md)
 - [LUE](lue/README.md)
