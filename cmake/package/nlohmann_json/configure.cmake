@@ -1,4 +1,4 @@
-set(build_nlohmann_json FALSE CACHE BOOL "Build Docopt")
+set(build_nlohmann_json FALSE CACHE BOOL "Build NLohmann JSON")
 set(nlohmann_json_version "2.1.1")
 
 if(build_nlohmann_json)
