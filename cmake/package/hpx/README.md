@@ -42,4 +42,5 @@ Redhat-based distribution:
 
 **macOS**
 
-Tested with compiler installed by macports. Use the package manager to install `hwloc`, `jemalloc` and `google-perftools`.
+Tested with compiler installed by macports. Use the package manager to
+install `hwloc`, `jemalloc` and `google-perftools`.
