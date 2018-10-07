@@ -44,6 +44,7 @@ else()
                 list(APPEND user_config "using gcc : : ${cxx}")
             endif()
         endif()
+        set(boost_cxx_flags "-std=c++11")
     elseif((${peacock_compiler_id} STREQUAL "clang"))
         set(boost_toolset clang)
 
@@ -137,7 +138,6 @@ set(b2_options
     --prefix=${boost_prefix}
     --layout=tagged
     toolset=${boost_toolset}
-    # cxxflags=${boost_cxx_flags}
     variant=${boost_variant}
     address-model=${boost_address_model}
     link=shared

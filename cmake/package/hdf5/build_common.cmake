@@ -2,9 +2,6 @@ set(hdf5_project_url http://www.hdfgroup.org/ftp/HDF5/releases)
 set(hdf5_url ${hdf5_project_url}/hdf5-${hdf5_version}/src/hdf5-${hdf5_version}.${hdf5_zip_extension})
 set(hdf5_prefix ${peacock_package_prefix})
 
-# TODO Required by HPX:
-# CFLAGS='-DHDatexit=""'
-# CPPFLAGS='-DHDatexit=""'
 
 set(hdf5_cmake_args
     ${hdf5_cmake_args}
@@ -12,7 +9,7 @@ set(hdf5_cmake_args
     -DBUILD_SHARED_LIBS:BOOL=ON
     -DHDF5_BUILD_FORTRAN:BOOL=OFF
     -DHDF5_BUILD_TOOLS:BOOL=ON
-    -DHDF5_BUILD_HL_LIB:BOOL=ON
+    -DHDF5_BUILD_HL_LIB:BOOL=OFF  # Not threadsafe
 )
 
 if(hdf5_cpp_lib)

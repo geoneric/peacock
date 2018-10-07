@@ -6,11 +6,24 @@ set(hpx_cmake_args
     ${hpx_cmake_args}
     -DCMAKE_INSTALL_PREFIX=${hpx_prefix}
     -DCMAKE_BUILD_TYPE=Release
-    -DHPX_WITH_EXAMPLES:BOOL=OFF
-    -DHPX_WITH_TESTS:BOOL=OFF
     -DHPX_WITH_MALLOC=JEMALLOC
     -DHPX_WITH_HWLOC:BOOL=ON
-    -DHPX_WITH_THREAD_IDLE_RATES=ON
+    -DHPX_WITH_THREAD_IDLE_RATES:BOOL=ON
+
+    -DHPX_WITH_PAPI:BOOL=ON
+    -DHPX_WITH_GOOGLE_PERFTOOLS:BOOL=ON
+
+    -DHPX_WITH_TOOLS:BOOL=ON
+    -DHPX_WITH_TESTS:BOOL=ON
+    -DHPX_WITH_EXAMPLES:BOOL=OFF  # TODO Compiler error. Boost.Config.
+    -DHPX_WITH_EXAMPLES_HDF5:BOOL=OFF  # TODO threadsafe hdf5 is not picked up
+    -DHPX_WITH_EXAMPLES_OPENMP:BOOL=ON
+
+    -DHPX_WITH_CXX0Y:BOOL=ON
+    -DHPX_WITH_UNWRAPPED_COMPATIBILITY:BOOL=OFF
+    -DHPX_WITH_INCLUSIVE_SCAN_COMPATIBILITY:BOOL=OFF
+    -DHPX_WITH_LOCAL_DATAFLOW_COMPATIBILITY:BOOL=OFF
+    -DHPX_WITH_PARCELPORT_ACTION_COUNTERS:BOOL=ON
 )
 
 
@@ -38,9 +51,18 @@ if(hpx_parcelport_mpi)
 endif()
 
 
+if(build_hdf5)
+    set(hpx_dependencies ${hpx_dependencies} hdf5-${hdf5_version})
+    set(hpx_cmake_find_root_path
+        ${hpx_cmake_find_root_path}
+        ${hdf5_prefix})
+endif()
+
+
 if(build_boost)
     set(hpx_dependencies ${hpx_dependencies} boost-${boost_version})
-    set(hpx_cmake_find_root_path ${hpx_cmake_find_root_path}
+    set(hpx_cmake_find_root_path
+        ${hpx_cmake_find_root_path}
         ${boost_prefix})
 endif()
 

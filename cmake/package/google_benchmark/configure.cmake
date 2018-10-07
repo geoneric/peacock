@@ -1,5 +1,5 @@
 set(build_google_benchmark FALSE CACHE BOOL "Build Google Benchmark")
-set(google_benchmark_version "1.3.0")
+set(google_benchmark_version "1.4.1")
 
 if(build_google_benchmark)
     set(google_benchmark_version ${google_benchmark_version} CACHE STRING
