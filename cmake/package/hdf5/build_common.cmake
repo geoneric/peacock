@@ -1,5 +1,11 @@
-set(hdf5_project_url http://www.hdfgroup.org/ftp/HDF5/releases)
-set(hdf5_url ${hdf5_project_url}/hdf5-${hdf5_version}/src/hdf5-${hdf5_version}.${hdf5_zip_extension})
+set(hdf5_project_url https://support.hdfgroup.org/ftp/HDF5/releases)
+
+string(REPLACE "." ";" hdf5_versions ${hdf5_version})
+list(GET hdf5_versions 0 hdf5_version_major)
+list(GET hdf5_versions 1 hdf5_version_minor)
+list(GET hdf5_versions 2 hdf5_version_patch)
+
+set(hdf5_url ${hdf5_project_url}/hdf5-${hdf5_version_major}.${hdf5_version_minor}/hdf5-${hdf5_version}/src/hdf5-${hdf5_version}.${hdf5_zip_extension})
 set(hdf5_prefix ${peacock_package_prefix})
 
 
